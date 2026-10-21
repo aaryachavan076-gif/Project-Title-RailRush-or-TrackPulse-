@@ -24,8 +24,14 @@
         <div class="card">
             <h2 style="text-align: center; margin-bottom: 1.5rem;">Passenger Login</h2>
 
-            <%-- Display error parameter forwarded from LoginServlet --%>
+            <%-- Display status parameter forwarded from LoginServlet or RegisterServlet --%>
             <%
+                String registered = request.getParameter("registered");
+                if ("true".equals(registered)) {
+            %>
+                <div class="alert alert-success">Registration successful! Please sign in with your credentials.</div>
+            <%
+                }
                 String error = request.getParameter("error");
                 if (error != null) {
             %>
