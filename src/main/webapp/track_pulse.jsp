@@ -15,6 +15,8 @@
             <a href="index.jsp" class="logo">🚆 Track<span>Pulse</span> <span style="font-size: 0.8rem; font-weight: 400; opacity: 0.8;">by RailRush</span></a>
             <nav>
                 <a href="index.jsp">Home</a>
+                <a href="experiments.jsp">Lab Suite (Exp 01-13)</a>
+                <a href="spa.jsp">React SPA</a>
                 <a href="dashboard.jsp">Dashboard</a>
                 <a href="ticket_confirmation.jsp">PNR Status</a>
             </nav>

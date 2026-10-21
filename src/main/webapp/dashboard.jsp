@@ -22,6 +22,9 @@
         <div class="nav-container">
             <a href="index.jsp" class="logo">🚆 Rail<span>Rush</span></a>
             <nav>
+                <a href="index.jsp">Home</a>
+                <a href="experiments.jsp">Lab Suite (Exp 01-13)</a>
+                <a href="spa.jsp">React SPA</a>
                 <a href="dashboard.jsp">Dashboard</a>
                 <a href="track_pulse.jsp">TrackPulse</a>
                 <a href="LogoutServlet" class="btn btn-sm btn-secondary" style="margin-left: 2rem;">Logout</a>

@@ -12,6 +12,8 @@
             <a href="index.jsp" class="logo">🚆 Rail<span>Rush</span></a>
             <nav>
                 <a href="index.jsp">Home</a>
+                <a href="experiments.jsp">Lab Suite (Exp 01-13)</a>
+                <a href="spa.jsp">React SPA</a>
                 <a href="login.jsp">Login</a>
                 <a href="register.jsp">Register</a>
             </nav>

@@ -13,6 +13,8 @@
             <a href="index.jsp" class="logo">🚆 Rail<span>Rush</span></a>
             <nav>
                 <a href="index.jsp">Home</a>
+                <a href="experiments.jsp" style="color: var(--secondary-color); font-weight: bold;">Lab Suite (Exp 01-13)</a>
+                <a href="spa.jsp">React SPA</a>
                 <a href="track_pulse.jsp">TrackPulse (Live Status)</a>
                 <a href="ticket_confirmation.jsp">PNR Enquiry</a>
                 <a href="login.jsp">Login</a>
@@ -87,6 +89,21 @@
                     </div>
                     <button type="submit" class="btn">Check Status</button>
                 </form>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 1.5rem; background: #0f172a; color: white; border-left: 5px solid #ff6f00;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h3 style="color: #38bdf8; margin: 0 0 0.5rem;">🧪 Full Stack Java Syllabus Suite (Experiments 01 &ndash; 13)</h3>
+                    <p style="color: #94a3b8; margin: 0; font-size: 0.95rem;">
+                        Interactive laboratory portal demonstrating all curriculum experiments: OOP, Servlets, JSP Objects, JS Validation, DOM 5s Color, React Hooks, React SPA, and Spring Boot Monolith + RESTful APIs.
+                    </p>
+                </div>
+                <div style="display: flex; gap: 0.75rem;">
+                    <a href="experiments.jsp" class="btn btn-secondary">Open Lab Suite &rarr;</a>
+                    <a href="spa.jsp" class="btn">Launch React SPA &rarr;</a>
+                </div>
             </div>
         </div>
     </div>

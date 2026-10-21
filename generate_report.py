@@ -279,36 +279,42 @@ def create_report():
         "Full-Stack Java (FSJ) Laboratory syllabus, bridging theoretical concepts with industrial-grade implementations:"
     )
 
-    exp_table = doc.add_table(rows=8, cols=3)
+    exp_table = doc.add_table(rows=14, cols=3)
     exp_table.alignment = WD_TABLE_ALIGNMENT.CENTER
     exp_headers = ["Exp No.", "Syllabus Laboratory Topic", "Concrete Implementation in RailRush"]
     style_table_header(exp_table, exp_headers)
     
     exp_data = [
-        ("Exp 01", "Classes, Encapsulation & Objects", "Domain model encapsulation with private members, standard getters/setters in User, Train, Ticket, and Passenger."),
-        ("Exp 02", "Constructor & Method Overloading", "Overloaded constructors in Train.java (minimal lookup vs full tariff route); overloaded searchTrain() signatures."),
-        ("Exp 03", "Inheritance & Custom Exceptions", "Hierarchical inheritance (PassengerUser extends User); Custom exceptions: SeatUnavailableException, InvalidPNRException, BookingFailedException."),
-        ("Exp 04", "Generic DAO & HTTP Servlets", "GenericDAO<T, ID> interface for type-safe persistence; Jakarta Servlets (BookTicketServlet, SearchTrainServlet, TrackPulseServlet) managing doGet/doPost."),
-        ("Exp 05", "JDBC PreparedStatements & MySQL", "Singleton DBConnection pool executing parameterized queries in TrainDAO and BookingDAO to prevent SQL Injection attacks."),
-        ("Exp 06", "JSP Implicit Objects & Action Tags", "Session authentication with 'session', dynamic output with 'out', and standard action tags <jsp:useBean> and <jsp:getProperty> in dashboard.jsp and ticket_confirmation.jsp."),
-        ("Exp 07", "Client-Side JavaScript Validation", "DOM event handlers in validation.js validating email regex, station matching, age bounds (1–120), and 10-digit PNR integrity.")
+        ("Exp 01", "Programs on classes and objects", "Encapsulated domain entities with private members, standard getters/setters in Train.java, User.java, Ticket.java, and Passenger.java."),
+        ("Exp 02", "Programs on method and constructor overloading", "Overloaded constructors in Train.java (minimal lookup vs full tariff route); overloaded searchTrain() queries in TrainDAO.java."),
+        ("Exp 03", "Programs on various types of inheritance and Exception handling", "Hierarchical inheritance (PassengerUser and AdminUser extending User); Custom exceptions: SeatUnavailableException, InvalidPNRException, BookingFailedException."),
+        ("Exp 04", "Program on Implementing Generic and HTTP servlet", "Protocol-independent GenericRailStatusServlet extending jakarta.servlet.GenericServlet (service() method) alongside production HttpServlet controllers (LoginServlet, BookTicketServlet, TrackPulseServlet)."),
+        ("Exp 05", "Design a login webpage in JSP that makes validation through Database using JDBC and call the servlet for various operations", "Secure login.jsp validating credentials via LoginServlet and DBConnection using SQL-injection resistant PreparedStatement and MySQL."),
+        ("Exp 06", "Program on Implicit and Explicit objects in JSP", "Session state with implicit objects (session, request, out, application) in dashboard.jsp; explicit JavaBean standard actions <jsp:useBean> and <jsp:getProperty> in ticket_confirmation.jsp."),
+        ("Exp 07", "Program to create a website using HTML CSS and JavaScript", "Responsive transit web portal (index.jsp, css/style.css, js/validation.js) with responsive grid layouts, card designs, and form controls."),
+        ("Exp 08", "Program using Java Script to validate email address ('@' & '.' check with alert dialog)", "Dedicated script exp08_email_validation.js and validation.js verifying presence of '@' and '.' characters. Triggers alert dialog on missing characters and refocuses field for re-entry."),
+        ("Exp 09", "Program based on Document Object Model to change background color automatically every 5 seconds", "DOM manipulation script exp09_dom_color.js dynamically cycling transit background palettes every 5000ms using setInterval() with countdown timer and manual pause/resume."),
+        ("Exp 10", "Program for making use of React Hooks displaying four buttons ('Red', 'Blue', 'Green', 'Yellow')", "Interactive React functional component exp10_react_color_hooks.js using useState Hook to display Red, Blue, Green, and Yellow signal buttons and rendering: 'You have selected that particular color: [Color]'."),
+        ("Exp 11", "Creating a Single Page website using concepts in React (Hooks, Router, Props and States)", "Complete React Single Page Application (spa.jsp, exp11_react_spa.js) featuring client-side router navigation, train cards passing props, search filters, and live booking state."),
+        ("Exp 12", "Program to create a Monolithic Application using SpringBoot", "Spring Boot Monolithic Architecture (RailRushSpringBootApplication, RailRushMonolithController) combining Server-Side Rendering (SSR), service beans, and application context."),
+        ("Exp 13", "Program for Building RESTful APIs with spring boot", "Production headless REST API controller RailRushRestController exposing /api/v1/trains, /api/v1/bookings, /api/v1/pnr/{id}, and /api/v1/telemetry/{id} with JSON serialization.")
     ]
 
     for idx, (exp_no, topic, impl) in enumerate(exp_data, start=1):
         row = exp_table.rows[idx]
-        row.cells[0].width = Inches(1.0)
-        row.cells[1].width = Inches(2.2)
+        row.cells[0].width = Inches(0.9)
+        row.cells[1].width = Inches(2.3)
         row.cells[2].width = Inches(3.3)
         for c_idx, text in enumerate([exp_no, topic, impl]):
             cell = row.cells[c_idx]
             if idx % 2 == 1:
                 set_cell_background(cell, HEX_LIGHT_BG)
-            set_cell_margins(cell, top=80, bottom=80, left=90, right=90)
+            set_cell_margins(cell, top=70, bottom=70, left=80, right=80)
             p = cell.paragraphs[0]
             p.paragraph_format.space_before = Pt(2)
             p.paragraph_format.space_after = Pt(2)
             r = p.add_run(text)
-            r.font.size = Pt(9.5)
+            r.font.size = Pt(9.0)
             if c_idx == 0:
                 r.font.bold = True
                 r.font.color.rgb = COLOR_PRIMARY
@@ -414,29 +420,33 @@ def create_report():
     add_heading_1("CHAPTER 5: DETAILED MODULE IMPLEMENTATION")
     
     add_heading_2("5.1 Model Layer Components")
-    add_bullet("User.java & PassengerUser.java: ", "Implements core user credentials and hierarchical inheritance, storing loyalty points and preferred travel class.")
+    add_bullet("User.java, PassengerUser.java & AdminUser.java: ", "Implements core user credentials and hierarchical inheritance, storing loyalty points, preferred travel class, and administrative privileges.")
     add_bullet("Train.java: ", "Encapsulates schedule times, route station endpoints, seat inventory, and overloaded constructors for dynamic query results.")
     add_bullet("Ticket.java: ", "JavaBean conforming to standard specifications, containing full journey parameters, fare details, and a List<Passenger> collection.")
     add_bullet("LiveStatus.java: ", "Telemetry encapsulation representing current station, estimated delay, and status update timestamps.")
 
-    add_heading_2("5.2 Controller / Servlet Layer")
+    add_heading_2("5.2 Controller / Servlet Layer (Jakarta EE & GenericServlet)")
+    add_bullet("GenericRailStatusServlet.java: ", "Directly inherits from jakarta.servlet.GenericServlet and overrides service(ServletRequest, ServletResponse) to implement protocol-independent gateway operations (Exp 04).")
     add_bullet("LoginServlet.java: ", "Validates email and password using JDBC PreparedStatement, sets session attributes ('userId', 'userName', 'userRole'), and redirects to dashboard.jsp.")
     add_bullet("SearchTrainServlet.java: ", "Processes GET/POST origin and destination queries, queries TrainDAO, and forwards request scope attributes to search_results.jsp.")
     add_bullet("BookTicketServlet.java: ", "Coordinates session verification, seat quota checking, fare calculation, and invokes BookingDAO.bookTicket().")
     add_bullet("TrackPulseServlet.java: ", "Filters fleet telemetry by optional train number parameter and forwards real-time status feeds to track_pulse.jsp.")
 
-    add_heading_2("5.3 Presentation & View Layer")
-    add_bullet("index.jsp: ", "Modern portal landing page with origin/destination dropdowns and quick links to live telemetry.")
-    add_bullet("dashboard.jsp: ", "Personalized passenger view utilizing JSP implicit session objects and explicit <jsp:useBean> and <jsp:getProperty> tags.")
-    add_bullet("ticket_confirmation.jsp: ", "E-ticket summary displaying the 10-digit PNR, passenger berth allocation, and print stylesheet.")
-    add_bullet("track_pulse.jsp: ", "Telemetry monitor featuring automatic 30-second meta-refresh for live station progress.")
+    add_heading_2("5.3 Modern Extension: Spring Boot Monolith & REST APIs")
+    add_bullet("RailRushSpringBootApplication.java: ", "Annotated with @SpringBootApplication, serving as the entry point for the monolithic Spring Boot service (Exp 12).")
+    add_bullet("RailRushMonolithController.java: ", "Spring MVC controller rendering server-side templates with Model binding and session synchronization.")
+    add_bullet("RailRushRestController.java: ", "Spring @RestController exposing headless endpoints (/api/v1/trains, /api/v1/bookings, /api/v1/pnr/{id}, /api/v1/telemetry/{id}) with JSON serialization and HTTP status codes (Exp 13).")
 
-    add_heading_2("5.4 Client-Side Validation (validation.js)")
-    add_body(
-        "Client-side verification ensures that only sanitized inputs are transmitted to the backend servlets. "
-        "Functions include validateLoginForm(), validateSearchForm() (ensuring source != destination), "
-        "validateBookingForm() (enforcing passenger age between 1 and 120), and validatePNRForm() (verifying exact 10 numeric digits)."
-    )
+    add_heading_2("5.4 Presentation Layer & React SPA Integration")
+    add_bullet("index.jsp & experiments.jsp: ", "Landing portal and interactive 13-experiment demonstration laboratory suite.")
+    add_bullet("spa.jsp & exp11_react_spa.js: ", "Complete Single Page Application (SPA) built with React Functional Components, Hooks (useState, useEffect), simulated Router, and Props passing (Exp 11).")
+    add_bullet("exp10_react_color_hooks.js: ", "Interactive React Hooks component rendering Red, Blue, Green, and Yellow buttons with dynamic selection feedback (Exp 10).")
+    add_bullet("dashboard.jsp & ticket_confirmation.jsp: ", "JSP views utilizing implicit objects (session, request, out) and action tags (<jsp:useBean>).")
+
+    add_heading_2("5.5 Client-Side Validation & DOM Manipulation")
+    add_bullet("exp08_email_validation.js: ", "Validates mandatory presence of '@' and '.' characters in email inputs; raises alert dialog and refocuses field on failure (Exp 08).")
+    add_bullet("exp09_dom_color.js: ", "Cycles web page background color automatically every 5 seconds (5000ms) using setInterval() with real-time countdown timer (Exp 09).")
+    add_bullet("validation.js: ", "Comprehensive form validation verifying station mismatch, age range constraints (1–120), and 10-digit PNR numeric format.")
 
     # -------------------------------------------------------------
     # CHAPTER 6: SYSTEM REQUIREMENTS & DEPLOYMENT GUIDE

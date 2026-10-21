@@ -1,9 +1,26 @@
 /**
- * Client-Side JavaScript Validation (Exp 07)
+ * Client-Side JavaScript Validation (Exp 07 & Exp 08)
  */
 
+/**
+ * Exp 08: Validate email address presence of '@' & '.' characters.
+ * If missing, displays alert box reporting error and asks user to re-enter.
+ */
+function validateEmailPresenceCheck(email, inputElement) {
+    if (email.indexOf('@') === -1 || email.indexOf('.') === -1) {
+        alert("Validation Error: Email address must contain both '@' and '.' characters!\nPlease re-enter your email address again.");
+        if (inputElement) {
+            inputElement.focus();
+            inputElement.select();
+        }
+        return false;
+    }
+    return true;
+}
+
 function validateLoginForm() {
-    const email = document.forms["loginForm"]["email"].value.trim();
+    const emailField = document.forms["loginForm"]["email"];
+    const email = emailField.value.trim();
     const password = document.forms["loginForm"]["password"].value.trim();
 
     if (email === "" || password === "") {
@@ -11,10 +28,8 @@ function validateLoginForm() {
         return false;
     }
 
-    // Email format validation (contains '@' and '.')
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        alert("Please enter a valid email address containing '@' and '.'");
+    // Experiment 08 Check
+    if (!validateEmailPresenceCheck(email, emailField)) {
         return false;
     }
 

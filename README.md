@@ -62,18 +62,23 @@ Built using enterprise-grade **Java (OOP, Servlets, JSP, JDBC, and Spring Boot)*
 
 ## 🎓 Academic Curriculum Alignment (FSJ Lab)
 
-**RailRush (TrackPulse)** is purposely structured to demonstrate core computer engineering competencies and syllabus experiments:
+**RailRush (TrackPulse)** is purposely structured to demonstrate every single laboratory experiment in the Full-Stack Java curriculum:
 
 | Exp No. | Laboratory Syllabus Topic | Concrete Implementation in RailRush |
 | :---: | :--- | :--- |
-| **01** | **Classes & Objects** | Encapsulated domain entities: `Train`, `Station`, `Passenger`, `Ticket`, and `Payment` with private fields and getter/setter methods. |
-| **02** | **Method & Constructor Overloading** | Overloaded `Train` constructors (basic lookup vs full route model); overloaded `searchTrain(String trainNo)` and `searchTrain(String src, String dest, LocalDate date)`. |
-| **03** | **Inheritance & Custom Exception Handling** | Class hierarchy (`User` $\rightarrow$ `PassengerUser`, `AdminUser`); Custom robust exceptions like `SeatUnavailableException`, `InvalidPNRException`, and `BookingLimitExceededException`. |
-| **04** | **Generic DAO & HTTP Servlets** | Generic abstraction `GenericDAO<T>` for CRUD database transactions; `HttpServlet` subclasses (`LoginServlet`, `BookTicketServlet`, `TrackServlet`) handling `doGet()` and `doPost()`. |
-| **05** | **JSP Login & JDBC Database Validation** | Secure `login.jsp` authenticating against MySQL database using `PreparedStatement` to prevent SQL Injection attacks. |
-| **06** | **Implicit & Explicit JSP Objects** | Session state management (`session` for passenger authentication, `request` for search result forward, `<jsp:useBean>` for dynamic ticket rendering). |
-| **07** | **HTML5, CSS3, & JavaScript Validation** | Client-side input validation via `validation.js` verifying station selection, email regex patterns, passenger age constraints, and PNR lengths. |
-| **10–13** | **React & Spring Boot REST APIs** *(Modern Extension)* | Modular REST API endpoints (`/api/v1/trains`, `/api/v1/pnr/{id}`) enabling scalable microservices and Single Page Application (SPA) integration. |
+| **01** | **Programs on classes and objects** | Encapsulated domain entities: [`Train.java`](src/main/java/com/railrush/model/Train.java), [`User.java`](src/main/java/com/railrush/model/User.java), [`Passenger.java`](src/main/java/com/railrush/model/Passenger.java), and [`Ticket.java`](src/main/java/com/railrush/model/Ticket.java) with private fields and getter/setter methods. |
+| **02** | **Programs on method and constructor overloading** | Overloaded constructors in [`Train.java`](src/main/java/com/railrush/model/Train.java) (lightweight lookup vs full route model); overloaded search signatures in [`TrainDAO.java`](src/main/java/com/railrush/dao/TrainDAO.java). |
+| **03** | **Programs on various types of inheritance and Exception handling** | Class hierarchy ([`User.java`](src/main/java/com/railrush/model/User.java) $\rightarrow$ [`PassengerUser.java`](src/main/java/com/railrush/model/PassengerUser.java), [`AdminUser.java`](src/main/java/com/railrush/model/AdminUser.java)); Custom robust exceptions: [`SeatUnavailableException.java`](src/main/java/com/railrush/exception/SeatUnavailableException.java), [`InvalidPNRException.java`](src/main/java/com/railrush/exception/InvalidPNRException.java), and [`BookingFailedException.java`](src/main/java/com/railrush/exception/BookingFailedException.java). |
+| **04** | **Program on Implementing Generic and HTTP servlet** | Protocol-independent [`GenericRailStatusServlet.java`](src/main/java/com/railrush/servlet/GenericRailStatusServlet.java) implementing `GenericServlet.service()`; production `HttpServlet` subclasses ([`LoginServlet.java`](src/main/java/com/railrush/servlet/LoginServlet.java), [`BookTicketServlet.java`](src/main/java/com/railrush/servlet/BookTicketServlet.java), [`TrackPulseServlet.java`](src/main/java/com/railrush/servlet/TrackPulseServlet.java)) handling `doGet()` and `doPost()`. |
+| **05** | **Design a login webpage in JSP that makes validation through Database using JDBC and call the servlet for various operations** | Secure [`login.jsp`](src/main/webapp/login.jsp) authenticating against MySQL database using `PreparedStatement` in [`LoginServlet.java`](src/main/java/com/railrush/servlet/LoginServlet.java) and [`DBConnection.java`](src/main/java/com/railrush/dao/DBConnection.java). |
+| **06** | **Program on Implicit and Explicit objects in JSP** | Session state and output via implicit objects (`session`, `request`, `out`, `application`) in [`dashboard.jsp`](src/main/webapp/dashboard.jsp); standard action tags `<jsp:useBean>` and `<jsp:getProperty>` in [`ticket_confirmation.jsp`](src/main/webapp/ticket_confirmation.jsp). |
+| **07** | **Program to create a website using HTML CSS and JavaScript** | Modern responsive railway web portal ([`index.jsp`](src/main/webapp/index.jsp), [`css/style.css`](src/main/webapp/css/style.css), [`js/validation.js`](src/main/webapp/js/validation.js)) featuring responsive grid cards and navigation. |
+| **08** | **Program using JavaScript to validate email address ('@' & '.' character check with alert dialog)** | Dedicated email character validation ([`js/exp08_email_validation.js`](src/main/webapp/js/exp08_email_validation.js)) verifying mandatory presence of `'@'` and `'.'`. Triggers alert error dialog and refocuses input for re-entry. |
+| **09** | **Program based on Document Object Model to change background color automatically after every 5 seconds** | Real-time DOM color cycle module ([`js/exp09_dom_color.js`](src/main/webapp/js/exp09_dom_color.js)) switching railway station background palettes every 5000ms using `setInterval()` with live countdown timer. |
+| **10** | **Program for making use of React Hooks displaying four buttons ("Red", "Blue", "Green", "Yellow")** | Interactive React functional component ([`js/exp10_react_color_hooks.js`](src/main/webapp/js/exp10_react_color_hooks.js)) using `useState` hook to render 4 color buttons and dynamically display: *"You have selected that particular color: [Color]"*. |
+| **11** | **Creating a Single Page website using concepts in React (Hooks, Router, Props, States)** | Full client-side Single Page Application ([`spa.jsp`](src/main/webapp/spa.jsp), [`js/exp11_react_spa.js`](src/main/webapp/js/exp11_react_spa.js)) integrating client-side routing, React Hooks, Props passing, and State management for train search, live telemetry, and booking. |
+| **12** | **Program to create a Monolithic Application using SpringBoot** | Monolithic server architecture ([`RailRushSpringBootApplication.java`](src/main/java/com/railrush/springboot/RailRushSpringBootApplication.java), [`RailRushMonolithController.java`](src/main/java/com/railrush/springboot/controller/RailRushMonolithController.java)) managing MVC templates, Dependency Injection, and unified services. |
+| **13** | **Program for Building RESTful APIs with spring boot** | Production headless REST controller ([`RailRushRestController.java`](src/main/java/com/railrush/springboot/controller/RailRushRestController.java)) exposing `/api/v1/trains`, `/api/v1/bookings`, `/api/v1/pnr/{id}`, and `/api/v1/telemetry/{id}` with JSON serialization. |
 
 ---
 
@@ -213,8 +218,9 @@ RailRush-TrackPulse/
 │       ├── java/
 │       │   └── com/railrush/
 │       │       ├── model/
-│       │       │   ├── User.java                # Base user model
+│       │       │   ├── User.java                # Base user model (Exp 01)
 │       │       │   ├── PassengerUser.java       # User inheritance (Exp 03)
+│       │       │   ├── AdminUser.java           # Admin hierarchy (Exp 03)
 │       │       │   ├── Train.java               # Train model & constructor overloading (Exp 02)
 │       │       │   ├── Ticket.java              # Ticket details & fare computation
 │       │       │   └── LiveStatus.java          # TrackPulse telemetry model
@@ -224,25 +230,42 @@ RailRush-TrackPulse/
 │       │       │   └── BookingFailedException.java
 │       │       ├── dao/
 │       │       │   ├── GenericDAO.java          # Generic database interface (Exp 04)
-│       │       │   ├── DBConnection.java        # JDBC connection manager
+│       │       │   ├── DBConnection.java        # JDBC connection manager (Exp 05)
 │       │       │   ├── TrainDAO.java            # Train inventory CRUD
 │       │       │   └── BookingDAO.java          # Transactional booking persistence
-│       │       └── servlet/
-│       │           ├── LoginServlet.java        # Authentication servlet (Exp 04/05)
-│       │           ├── SearchTrainServlet.java  # Search processing
-│       │           ├── BookTicketServlet.java   # ACID booking & PNR generator
-│       │           ├── TrackPulseServlet.java   # Live delay tracking endpoint
-│       │           └── LogoutServlet.java       # Session invalidator
+│       │       ├── servlet/
+│       │       │   ├── GenericRailStatusServlet.java # GenericServlet implementation (Exp 04)
+│       │       │   ├── LoginServlet.java        # Authentication servlet (Exp 04/05)
+│       │       │   ├── SearchTrainServlet.java  # Search processing
+│       │       │   ├── BookTicketServlet.java   # ACID booking & PNR generator
+│       │       │   ├── TrackPulseServlet.java   # Live delay tracking endpoint
+│       │       │   └── LogoutServlet.java       # Session invalidator
+│       │       └── springboot/
+│       │           ├── RailRushSpringBootApplication.java # Spring Boot Monolith Entry (Exp 12)
+│       │           ├── controller/
+│       │           │   ├── RailRushMonolithController.java # Monolithic SSR controller (Exp 12)
+│       │           │   └── RailRushRestController.java     # REST API Controller (Exp 13)
+│       │           ├── service/
+│       │           │   ├── TrainService.java               # Service layer
+│       │           │   └── BookingService.java             # PNR & reservation engine
+│       │           └── dto/
+│       │               ├── TrainDTO.java
+│       │               ├── BookingRequestDTO.java
+│       │               └── BookingResponseDTO.java
 │       └── webapp/
 │           ├── WEB-INF/
 │           │   └── web.xml                      # Deployment descriptor
 │           ├── css/
-│           │   ├── style.css                    # Main design system
-│           │   └── dashboard.css                # Passenger dashboard styling
+│           │   └── style.css                    # Main design system
 │           ├── js/
-│           │   ├── validation.js                # Client-side form validation (Exp 07)
-│           │   └── live-track.js                # AJAX polling for live status
-│           ├── index.jsp                        # Homepage & quick search
+│           │   ├── validation.js                # Form validation (Exp 07/08)
+│           │   ├── exp08_email_validation.js    # Dedicated Email '@' & '.' presence check (Exp 08)
+│           │   ├── exp09_dom_color.js           # 5-second DOM color changer (Exp 09)
+│           │   ├── exp10_react_color_hooks.js   # React Hooks 4 color buttons (Exp 10)
+│           │   └── exp11_react_spa.js           # Full React SPA with Hooks & Router (Exp 11)
+│           ├── index.jsp                        # Homepage & quick search (Exp 07)
+│           ├── experiments.jsp                  # Master Interactive Lab Suite (Exp 01 - 13)
+│           ├── spa.jsp                          # Dedicated React SPA view (Exp 11)
 │           ├── login.jsp                        # Authentication page (Exp 05)
 │           ├── register.jsp                     # Passenger account registration
 │           ├── dashboard.jsp                    # Dynamic session dashboard (Exp 06)
@@ -253,9 +276,10 @@ RailRush-TrackPulse/
 ├── database/
 │   └── schema.sql                               # Complete MySQL database DDL/DML script
 ├── docs/
-│   ├── Architecture_Diagram.png
-│   └── Test_Cases.pdf
-├── pom.xml                                      # Maven build file (or build.gradle)
+│   ├── PROJECT_REPORT.md                        # Technical markdown documentation
+│   └── RailRush_Project_Report.docx             # Formal academic project report
+├── generate_report.py                           # Python report generator script
+├── pom.xml                                      # Maven build file (Jakarta + Spring Boot)
 └── README.md                                    # Project documentation
 ```
 
