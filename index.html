@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RailRush - Next-Gen Railway Booking &amp; TrackPulse</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/validation.js"></script>
+    <style>
+        .train-result-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+            border-left: 5px solid var(--primary-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-box {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 520px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-top: 5px solid var(--secondary-color);
+        }
+        .ticket-modal-box {
+            background: #0f172a;
+            color: #ffffff;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            border: 1px solid #38bdf8;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">🚆 Rail<span>Rush</span></a>
+            <nav>
+                <a href="index.html" style="color: var(--secondary-color); font-weight: bold;">Home</a>
+                <a href="experiments.html">Lab Suite (Exp 01-13)</a>
+                <a href="spa.html">React SPA</a>
+                <a href="track_pulse.html">TrackPulse (Live Status)</a>
+                <a href="#pnrSection">PNR Enquiry</a>
+                <a href="login.html">Login</a>
+                <a href="login.html?tab=register" class="btn btn-sm">Register</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Live Status Bar -->
+        <div style="background: #14532d; color: #4ade80; padding: 10px 18px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; font-size: 0.9rem;">
+            <span>🟢 <strong>RailRush Live Web Portal is Active</strong> &mdash; Cloud &amp; Client-Side ACID Reservation Engine Online</span>
+            <span><a href="https://github.com/aaryachavan076-gif/Project-Title-RailRush-or-TrackPulse-" target="_blank" style="color: #ffffff; text-decoration: underline;">GitHub Repository &rarr;</a></span>
+        </div>
+
+        <div class="card" style="text-align: center; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 3rem 1.5rem;">
+            <h1 style="font-size: 2.6rem; margin-bottom: 0.6rem;">Indian Railway Ticketing &amp; Live Tracking</h1>
+            <p style="font-size: 1.15rem; opacity: 0.92; max-width: 750px; margin: 0 auto 1.5rem;">
+                Fast, secure, real-time seat reservation powered by Full-Stack Java (Jakarta Servlets, JSP, JDBC, Spring Boot) &amp; React.
+            </p>
+            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                <a href="#bookingSection" class="btn btn-secondary">Book Train Tickets &rarr;</a>
+                <a href="spa.html" class="btn" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: #fff;">Launch React SPA (Exp 11)</a>
+                <a href="experiments.html" class="btn" style="background: #ff6f00; color: #fff;">FSJ Lab Suite (Exp 01-13)</a>
+            </div>
+        </div>
+
+        <!-- Train Search & Booking Section -->
+        <div class="card" id="bookingSection">
+            <h2>Book Train Tickets</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Search available trains across major Indian railway junctions</p>
+
+            <form id="trainSearchForm" onsubmit="handleLiveSearch(event)">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 1rem; align-items: flex-end;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="source">Source Station</label>
+                        <select id="source" name="source" class="form-control" required>
+                            <option value="">Select Origin</option>
+                            <option value="CSMT Mumbai" selected>CSMT Mumbai</option>
+                            <option value="Dadar">Dadar</option>
+                            <option value="Thane">Thane</option>
+                            <option value="Pune Junction">Pune Junction</option>
+                            <option value="Hazrat Nizamuddin">Hazrat Nizamuddin (Delhi)</option>
+                            <option value="Madgaon (Goa)">Madgaon (Goa)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="destination">Destination Station</label>
+                        <select id="destination" name="destination" class="form-control" required>
+                            <option value="">Select Destination</option>
+                            <option value="Madgaon (Goa)" selected>Madgaon (Goa)</option>
+                            <option value="Hazrat Nizamuddin">Hazrat Nizamuddin (Delhi)</option>
+                            <option value="Pune Junction">Pune Junction</option>
+                            <option value="CSMT Mumbai">CSMT Mumbai</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="date">Journey Date</label>
+                        <input type="date" id="date" name="date" class="form-control" required>
+                    </div>
+
+                    <div>
+                        <button type="submit" class="btn" style="height: 48px;">Search Trains</button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Search Results Display Area -->
+            <div id="searchResultsArea" style="margin-top: 25px;"></div>
+        </div>
+
+        <!-- Live Telemetry & PNR Inquiry Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;" id="pnrSection">
+            <div class="card">
+                <h3>🧭 TrackPulse Real-Time Telemetry</h3>
+                <p style="margin: 0.5rem 0 1rem; color: var(--text-muted);">
+                    Get real-time delays, intermediate arrival times, and platform numbers for live running trains.
+                </p>
+                <a href="track_pulse.html" class="btn btn-secondary">Open Live TrackPulse &rarr;</a>
+            </div>
+
+            <div class="card">
+                <h3>🔍 Quick PNR Inquiry</h3>
+                <form onsubmit="handlePNRCheck(event)">
+                    <div class="form-group">
+                        <label for="pnrInput">Enter 10-Digit PNR Number</label>
+                        <input type="text" id="pnrInput" class="form-control" placeholder="e.g. RR84920194 or 8472910384" maxlength="10" required>
+                    </div>
+                    <button type="submit" class="btn">Check Status</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Full Stack Java Syllabus Suite Feature Card -->
+        <div class="card" style="margin-top: 1.5rem; background: #0f172a; color: white; border-left: 5px solid #ff6f00;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h3 style="color: #38bdf8; margin: 0 0 0.5rem;">🧪 Full Stack Java Syllabus Suite (Experiments 01 &ndash; 13)</h3>
+                    <p style="color: #94a3b8; margin: 0; font-size: 0.95rem;">
+                        Explore interactive demonstrations for every syllabus experiment: OOP Classes &amp; Objects, Overloading, Inheritance &amp; Exceptions, Generic &amp; HTTP Servlets, JSP JDBC Login, JSP Implicit Objects, HTML/CSS/JS, Email Validation, DOM 5-Second Color Rotation, React Hooks 4 Signal Buttons, React SPA, and Spring Boot Monolith + REST APIs.
+                    </p>
+                </div>
+                <div style="display: flex; gap: 0.75rem;">
+                    <a href="experiments.html" class="btn btn-secondary">Open Lab Suite (Exp 01-13) &rarr;</a>
+                    <a href="spa.html" class="btn">Launch React SPA &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3 id="modalTrainTitle" style="color: var(--primary-color); margin-top: 0;">Reserve Berth</h3>
+            <p id="modalTrainSub" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.2rem;"></p>
+
+            <form id="passengerBookingForm" onsubmit="handleConfirmBooking(event)">
+                <div class="form-group">
+                    <label for="passengerName">Passenger Full Name</label>
+                    <input type="text" id="passengerName" class="form-control" placeholder="e.g. Aarya Chavan" required>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div class="form-group">
+                        <label for="passengerAge">Passenger Age</label>
+                        <input type="number" id="passengerAge" class="form-control" min="1" max="120" placeholder="e.g. 21" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="passengerGender">Gender</label>
+                        <select id="passengerGender" class="form-control">
+                            <option value="FEMALE">Female</option>
+                            <option value="MALE">Male</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="travelClass">Class of Travel</label>
+                    <select id="travelClass" class="form-control" onchange="updateFareDisplay()">
+                        <option value="SLEEPER">Sleeper (SL)</option>
+                        <option value="AC_3_TIER">AC 3-Tier (3A)</option>
+                    </select>
+                </div>
+                <div style="background: #f1f5f9; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; color: var(--primary-color);">
+                    Calculated Fare: <span id="fareDisplay">&#8377;320.00</span>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn" style="flex: 1;">Confirm &amp; Issue PNR</button>
+                    <button type="button" class="btn" style="background: #64748b;" onclick="closeBookingModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Ticket Confirmation Modal -->
+    <div id="ticketModal" class="modal-overlay">
+        <div class="ticket-modal-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 12px; margin-bottom: 16px;">
+                <h2 style="margin: 0; color: #38bdf8;">🚆 E-Ticket &amp; PNR Confirmation</h2>
+                <span style="background: #14532d; color: #4ade80; padding: 4px 10px; border-radius: 4px; font-weight: bold; font-size: 0.85rem;">CONFIRMED</span>
+            </div>
+            <div id="ticketDetailsBody"></div>
+            <div style="margin-top: 24px; display: flex; gap: 12px;">
+                <button class="btn" style="background: #22c55e;" onclick="window.print()">🖨️ Print Ticket</button>
+                <button class="btn" style="background: #64748b;" onclick="closeTicketModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 RailRush (TrackPulse). Full Stack Java Engineering Project &amp; Live Web Application.</p>
+    </footer>
+
+    <!-- Interactive Live Engine Script -->
+    <script>
+        // Set default date to tomorrow
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        document.getElementById('date').value = tomorrow.toISOString().split('T')[0];
+
+        // Master Train Catalog
+        let fleetData = [
+            { number: "12051", name: "Jan Shatabdi Express", from: "CSMT Mumbai", to: "Madgaon (Goa)", dept: "05:10", arr: "14:30", fareSL: 320, fareAC: 1050, available: 42, total: 500 },
+            { number: "22221", name: "Rajdhani Express", from: "CSMT Mumbai", to: "Hazrat Nizamuddin", dept: "16:00", arr: "09:55", fareSL: 650, fareAC: 2450, available: 18, total: 450 },
+            { number: "12123", name: "Deccan Queen Express", from: "CSMT Mumbai", to: "Pune Junction", dept: "17:10", arr: "20:25", fareSL: 120, fareAC: 480, available: 124, total: 600 },
+            { number: "11019", name: "Konark Express", from: "CSMT Mumbai", to: "Pune Junction", dept: "14:00", arr: "17:45", fareSL: 140, fareAC: 520, available: 85, total: 550 }
+        ];
+
+        let selectedActiveTrain = null;
+        let storedBookings = {
+            "RR84920194": {
+                pnr: "RR84920194",
+                passengerName: "Aarya Chavan",
+                passengerAge: 21,
+                passengerGender: "FEMALE",
+                trainNumber: "12051",
+                trainName: "Jan Shatabdi Express",
+                from: "CSMT Mumbai",
+                to: "Madgaon (Goa)",
+                travelClass: "AC 3-Tier (3A)",
+                fare: 1050,
+                berth: "Coach B2 - Berth 31 (Lower)",
+                journeyDate: "2026-10-25"
+            }
+        };
+
+        function handleLiveSearch(e) {
+            e.preventDefault();
+            const src = document.getElementById('source').value;
+            const dest = document.getElementById('destination').value;
+
+            if (src.toLowerCase() === dest.toLowerCase()) {
+                alert("Source and Destination stations cannot be identical!");
+                return;
+            }
+
+            const results = fleetData.filter(t => 
+                (src === "" || t.from.toLowerCase() === src.toLowerCase()) &&
+                (dest === "" || t.to.toLowerCase() === dest.toLowerCase())
+            );
+
+            renderSearchResults(results);
+        }
+
+        function renderSearchResults(trains) {
+            const container = document.getElementById('searchResultsArea');
+            if (trains.length === 0) {
+                container.innerHTML = `
+                    <div style="background: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 15px; border-radius: 8px;">
+                        No direct trains found between selected stations. Try searching for <strong>CSMT Mumbai &rarr; Madgaon (Goa)</strong> or <strong>CSMT Mumbai &rarr; Pune Junction</strong>.
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `<h3>Found ${trains.length} Active Express Train(s):</h3>`;
+            trains.forEach(t => {
+                html += `
+                    <div class="train-result-card">
+                        <div>
+                            <h3 style="margin: 0 0 6px; color: var(--primary-color);">${t.name} <span style="font-size: 0.85rem; color: #64748b;">(#${t.number})</span></h3>
+                            <div style="font-size: 0.95rem; color: #334155; margin-bottom: 8px;">
+                                <strong>${t.from}</strong> (${t.dept}) &rarr; <strong>${t.to}</strong> (${t.arr})
+                            </div>
+                            <div style="font-size: 0.85rem; color: #64748b;">
+                                Sleeper: <strong>&#8377;${t.fareSL}</strong> | AC 3-Tier: <strong>&#8377;${t.fareAC}</strong>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="margin-bottom: 8px;">
+                                <span class="badge ${t.available > 10 ? 'badge-success' : 'badge-warning'}">
+                                    ${t.available} Seats Available
+                                </span>
+                            </div>
+                            <button class="btn btn-sm btn-secondary" onclick="openBookingModal('${t.number}')">Book Berth &rarr;</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function openBookingModal(trainNumber) {
+            selectedActiveTrain = fleetData.find(t => t.number === trainNumber);
+            if (!selectedActiveTrain) return;
+
+            document.getElementById('modalTrainTitle').textContent = `Book Berth: ${selectedActiveTrain.name}`;
+            document.getElementById('modalTrainSub').textContent = `Train #${selectedActiveTrain.number} | ${selectedActiveTrain.from} to ${selectedActiveTrain.to}`;
+            updateFareDisplay();
+            document.getElementById('bookingModal').style.display = 'flex';
+        }
+
+        function closeBookingModal() {
+            document.getElementById('bookingModal').style.display = 'none';
+        }
+
+        function updateFareDisplay() {
+            if (!selectedActiveTrain) return;
+            const cls = document.getElementById('travelClass').value;
+            const fare = cls === 'SLEEPER' ? selectedActiveTrain.fareSL : selectedActiveTrain.fareAC;
+            document.getElementById('fareDisplay').innerHTML = `&#8377;${fare}.00`;
+        }
+
+        function handleConfirmBooking(e) {
+            e.preventDefault();
+            const name = document.getElementById('passengerName').value.trim();
+            const age = parseInt(document.getElementById('passengerAge').value, 10);
+            const gender = document.getElementById('passengerGender').value;
+            const travelClass = document.getElementById('travelClass').value;
+
+            if (selectedActiveTrain.available <= 0) {
+                alert("Error: Quota full! SeatUnavailableException triggered.");
+                return;
+            }
+
+            // Decrement available seat count (ACID simulation)
+            selectedActiveTrain.available--;
+
+            const pnr = "RR" + Math.floor(10000000 + Math.random() * 90000000);
+            const fare = travelClass === 'SLEEPER' ? selectedActiveTrain.fareSL : selectedActiveTrain.fareAC;
+            const berth = (travelClass === 'SLEEPER' ? 'Coach S2 - Berth ' : 'Coach B1 - Berth ') + (Math.floor(Math.random() * 72) + 1);
+
+            const booking = {
+                pnr,
+                passengerName: name,
+                passengerAge: age,
+                passengerGender: gender,
+                trainNumber: selectedActiveTrain.number,
+                trainName: selectedActiveTrain.name,
+                from: selectedActiveTrain.from,
+                to: selectedActiveTrain.to,
+                travelClass: travelClass === 'SLEEPER' ? 'Sleeper (SL)' : 'AC 3-Tier (3A)',
+                fare,
+                berth,
+                journeyDate: document.getElementById('date').value
+            };
+
+            storedBookings[pnr] = booking;
+            closeBookingModal();
+            displayTicketModal(booking);
+
+            // Re-render search results to update remaining seat count
+            handleLiveSearch(new Event('submit'));
+        }
+
+        function displayTicketModal(b) {
+            const body = document.getElementById('ticketDetailsBody');
+            body.innerHTML = `
+                <div style="background: #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 1.1rem; border-bottom: 1px solid #334155; padding-bottom: 10px; margin-bottom: 12px;">
+                        <span>PNR: <strong style="color: #38bdf8;">${b.pnr}</strong></span>
+                        <span style="color: #f59e0b;">Date: ${b.journeyDate}</span>
+                    </div>
+                    <p style="margin: 0 0 8px;"><strong>Passenger:</strong> ${b.passengerName} (${b.passengerAge} yrs, ${b.passengerGender})</p>
+                    <p style="margin: 0 0 8px;"><strong>Train:</strong> ${b.trainName} (#${b.trainNumber})</p>
+                    <p style="margin: 0 0 8px;"><strong>Route:</strong> ${b.from} &rarr; ${b.to}</p>
+                    <p style="margin: 0 0 8px;"><strong>Class &amp; Berth:</strong> ${b.travelClass} | <span style="color: #4ade80; font-weight: bold;">${b.berth}</span></p>
+                    <p style="margin: 0;"><strong>Total Fare:</strong> &#8377;${b.fare}.00 (PAID)</p>
+                </div>
+                <div style="font-size: 0.85rem; color: #94a3b8;">
+                    ✓ E-Ticket confirmed under RailRush ACID transaction protocol. Please carry a valid Government ID card.
+                </div>
+            `;
+            document.getElementById('ticketModal').style.display = 'flex';
+        }
+
+        function closeTicketModal() {
+            document.getElementById('ticketModal').style.display = 'none';
+        }
+
+        function handlePNRCheck(e) {
+            e.preventDefault();
+            const pnr = document.getElementById('pnrInput').value.trim();
+            if (storedBookings[pnr]) {
+                displayTicketModal(storedBookings[pnr]);
+            } else {
+                alert("PNR " + pnr + " not found in local ledger. Try demo PNR: RR84920194 or book a new ticket above!");
+            }
+        }
+
+        // Initialize default search on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            handleLiveSearch(new Event('submit'));
+        });
+    </script>
+</body>
+</html>

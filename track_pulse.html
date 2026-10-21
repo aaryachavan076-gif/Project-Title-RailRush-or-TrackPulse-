@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrackPulse - Real-Time Train Movement Telemetry</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">🚆 Track<span>Pulse</span> <span style="font-size: 0.8rem; font-weight: 400; opacity: 0.8;">by RailRush</span></a>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="experiments.html">Lab Suite (Exp 01-13)</a>
+                <a href="spa.html">React SPA</a>
+                <a href="track_pulse.html" style="color: var(--secondary-color); font-weight: bold;">TrackPulse</a>
+                <a href="index.html#pnrSection">PNR Status</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card" style="display: flex; justify-content: space-between; align-items: center; background: #0f172a; color: white; flex-wrap: wrap; gap: 15px;">
+            <div>
+                <h2 style="margin: 0 0 6px; color: #38bdf8;">Live Train Movement Telemetry</h2>
+                <p style="opacity: 0.8; font-size: 0.95rem; margin: 0;">Auto-refreshing with live telemetry feeds</p>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <span class="badge badge-success" id="pulseStatus">FEED: ACTIVE</span>
+                <button class="btn btn-sm btn-secondary" onclick="refreshTelemetry()">Refresh Now 🔄</button>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 1.5rem;">
+            <h3>Active En-Route Trains</h3>
+            <div style="overflow-x: auto; margin-top: 1rem;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #e2e8f0; color: #64748b;">
+                            <th style="padding: 12px;">Train #</th>
+                            <th style="padding: 12px;">Train Name</th>
+                            <th style="padding: 12px;">Current Station</th>
+                            <th style="padding: 12px;">Platform</th>
+                            <th style="padding: 12px;">Next Station</th>
+                            <th style="padding: 12px;">Status / Delay</th>
+                        </tr>
+                    </thead>
+                    <tbody id="telemetryBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 RailRush (TrackPulse). Real-time GPS movement telemetry stream.</p>
+    </footer>
+
+    <script>
+        const trainsTelemetry = [
+            { number: "12051", name: "Jan Shatabdi Express", current: "Ratnagiri Junction", platform: "PF-2", next: "Madgaon (Goa)", status: "ON TIME", delay: 0 },
+            { number: "22221", name: "Rajdhani Express", current: "Bhopal Junction", platform: "PF-1", next: "Jhansi Junction", status: "10 MIN DELAY", delay: 10 },
+            { number: "12123", name: "Deccan Queen", current: "Lonavala Station", platform: "PF-3", next: "Shivajinagar", status: "ON TIME", delay: 0 },
+            { number: "11019", name: "Konark Express", current: "Solapur Junction", platform: "PF-4", next: "Gulbarga", status: "25 MIN DELAY", delay: 25 }
+        ];
+
+        function renderTelemetry() {
+            const tbody = document.getElementById('telemetryBody');
+            let html = "";
+            trainsTelemetry.forEach(t => {
+                const isLate = t.delay > 0;
+                html += `
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 14px; font-weight: bold; color: var(--primary-color);">${t.number}</td>
+                        <td style="padding: 14px; font-weight: 600;">${t.name}</td>
+                        <td style="padding: 14px;"><strong>${t.current}</strong></td>
+                        <td style="padding: 14px;"><span class="badge" style="background:#e0f2fe; color:#0369a1;">${t.platform}</span></td>
+                        <td style="padding: 14px; color: #475569;">${t.next}</td>
+                        <td style="padding: 14px;">
+                            <span class="badge ${isLate ? 'badge-danger' : 'badge-success'}">
+                                ${t.status}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function refreshTelemetry() {
+            renderTelemetry();
+            const pulse = document.getElementById('pulseStatus');
+            pulse.textContent = "SYNCED JUST NOW";
+            setTimeout(() => { pulse.textContent = "FEED: ACTIVE"; }, 1500);
+        }
+
+        renderTelemetry();
+        setInterval(refreshTelemetry, 15000);
+    </script>
+</body>
+</html>

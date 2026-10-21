@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passenger Authentication - RailRush</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/exp08_email_validation.js"></script>
+    <script src="js/validation.js"></script>
+    <style>
+        .auth-tab {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .auth-tab button {
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #64748b;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        .auth-tab button.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">🚆 Rail<span>Rush</span></a>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="experiments.html">Lab Suite (Exp 01-13)</a>
+                <a href="spa.html">React SPA</a>
+                <a href="track_pulse.html">TrackPulse</a>
+                <a href="login.html" style="color: var(--secondary-color); font-weight: bold;">Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container" style="max-width: 480px; margin-top: 3rem;">
+        <div class="card">
+            <div class="auth-tab">
+                <button id="loginTabBtn" class="active" onclick="switchAuthTab('login')">Sign In</button>
+                <button id="registerTabBtn" onclick="switchAuthTab('register')">Create Account</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginFormContainer">
+                <h3 style="text-align: center; margin-bottom: 1.5rem;">Passenger Login</h3>
+                <form name="loginForm" onsubmit="handleStaticLogin(event)">
+                    <div class="form-group">
+                        <label for="email">Registered Email Address</label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="user@railrush.in" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required minlength="6">
+                    </div>
+
+                    <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Sign In to RailRush</button>
+                </form>
+                <div style="margin-top: 15px; font-size: 0.85rem; color: #64748b; text-align: center;">
+                    Demo Account: <code>user@example.com</code> / <code>user@123</code>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerFormContainer" style="display: none;">
+                <h3 style="text-align: center; margin-bottom: 1.5rem;">Passenger Registration</h3>
+                <form name="registerForm" onsubmit="handleStaticRegister(event)">
+                    <div class="form-group">
+                        <label for="regFullName">Full Name</label>
+                        <input type="text" id="regFullName" class="form-control" placeholder="e.g. Aarya Chavan" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regEmail">Email Address (Exp 08 Validator)</label>
+                        <input type="text" id="regEmail" class="form-control" placeholder="e.g. aarya@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regPhone">Phone Number</label>
+                        <input type="tel" id="regPhone" class="form-control" placeholder="e.g. 9812345678" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regPassword">Create Password</label>
+                        <input type="password" id="regPassword" class="form-control" placeholder="Minimum 6 characters" required minlength="6">
+                    </div>
+
+                    <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Complete Registration</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 RailRush (TrackPulse). Full Stack Java Engineering Mini-Project.</p>
+    </footer>
+
+    <script>
+        function switchAuthTab(tab) {
+            if (tab === 'login') {
+                document.getElementById('loginFormContainer').style.display = 'block';
+                document.getElementById('registerFormContainer').style.display = 'none';
+                document.getElementById('loginTabBtn').className = 'active';
+                document.getElementById('registerTabBtn').className = '';
+            } else {
+                document.getElementById('loginFormContainer').style.display = 'none';
+                document.getElementById('registerFormContainer').style.display = 'block';
+                document.getElementById('loginTabBtn').className = '';
+                document.getElementById('registerTabBtn').className = 'active';
+            }
+        }
+
+        // Check URL param tab
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('tab') === 'register') {
+            switchAuthTab('register');
+        }
+
+        function handleStaticLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!validateEmailPresenceCheck(email, document.getElementById('email'))) {
+                return;
+            }
+
+            alert(`Welcome back, ${email}! You have successfully authenticated into RailRush.`);
+            window.location.href = "index.html";
+        }
+
+        function handleStaticRegister(e) {
+            e.preventDefault();
+            const emailInput = document.getElementById('regEmail');
+            if (!validateEmailPresence('regEmail')) {
+                return;
+            }
+
+            alert("Registration successful! You can now log into RailRush.");
+            switchAuthTab('login');
+        }
+    </script>
+</body>
+</html>

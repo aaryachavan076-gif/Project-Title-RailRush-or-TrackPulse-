@@ -3,12 +3,30 @@
 > **Next-Generation Railway Ticket Reservation & Real-Time Train Tracking System**  
 > *A Comprehensive Full-Stack Java (FSJ) Engineering Mini-Project*
 
+[![Live Website](https://img.shields.io/badge/Live_Demo-Active_Online-brightgreen?style=for-the-badge&logo=githubpages&logoColor=white)](https://aaryachavan076-gif.github.io/Project-Title-RailRush-or-TrackPulse-/)
 [![GitHub repo](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/aaryachavan076-gif/Project-Title-RailRush-or-TrackPulse-)
 [![Java](https://img.shields.io/badge/Java-17%2B-ED8B00?logo=openjdk&logoColor=white)](https://www.oracle.com/java/)
 [![Servlet / JSP](https://img.shields.io/badge/Jakarta%20EE-Servlets%20%7C%20JSP-007396?logo=java&logoColor=white)](https://jakarta.ee/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
 [![MySQL](https://img.shields.io/badge/Database-MySQL%208.0-4479A1?logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+---
+
+## 🌐 Live Website & Access
+
+The live web application is hosted publicly via **GitHub Pages**:
+- 🔗 **Live Website URL**: **[https://aaryachavan076-gif.github.io/Project-Title-RailRush-or-TrackPulse-/](https://aaryachavan076-gif.github.io/Project-Title-RailRush-or-TrackPulse-/)**
+- 🧪 **FSJ Lab Suite (Exp 01 - 13)**: **[Lab Experiments Portal](https://aaryachavan076-gif.github.io/Project-Title-RailRush-or-TrackPulse-/experiments.html)**
+- ⚛️ **Dedicated React SPA**: **[RailRush Single Page App](https://aaryachavan076-gif.github.io/Project-Title-RailRush-or-TrackPulse-/spa.html)**
+- 📡 **TrackPulse Telemetry**: **[Live Train Tracker](https://aaryachavan076-gif.github.io/Project-Title-RailRush-or-TrackPulse-/track_pulse.html)**
+
+### ⚡ Running Live Locally (One-Click)
+Double-click `start_live_website.bat` or run:
+```bash
+python -m http.server 5000
+```
+Then visit **`http://localhost:5000/index.html`** in your browser.
 
 ---
 

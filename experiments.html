@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RailRush - Full Stack Java Laboratory Suite (Exp 01 - 13)</title>
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- React 18 for Exp 10 & 11 -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Scripts for Exp 08 & Exp 09 -->
+    <script src="js/exp08_email_validation.js"></script>
+    <script src="js/exp09_dom_color.js"></script>
+    <script src="js/validation.js"></script>
+
+    <style>
+        .exp-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            border-top: 4px solid var(--primary-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .exp-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .exp-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        .code-box {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 14px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.88rem;
+            overflow-x: auto;
+            margin: 10px 0;
+            white-space: pre-wrap;
+        }
+        .exp-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            background: #ffffff;
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 24px;
+        }
+        .exp-nav a {
+            background: #f1f5f9;
+            color: #1e293b;
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .exp-nav a:hover {
+            background: var(--primary-color);
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">🚆 Rail<span>Rush</span></a>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="experiments.html" style="color: var(--secondary-color); font-weight: bold;">Lab Suite (Exp 01-13)</a>
+                <a href="spa.html">React SPA</a>
+                <a href="track_pulse.html">TrackPulse</a>
+                <a href="index.html#pnrSection">PNR Enquiry</a>
+                <a href="login.html">Login</a>
+                <a href="login.html?tab=register" class="btn btn-sm">Register</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Hero Header -->
+        <div class="card" style="text-align: center; background: linear-gradient(135deg, #1e3c72 0%, #ff6f00 130%); color: white; padding: 2.5rem 1.5rem;">
+            <h1 style="font-size: 2.4rem; margin-bottom: 0.5rem;">Full-Stack Java (FSJ) Laboratory Suite</h1>
+            <p style="font-size: 1.15rem; opacity: 0.95; max-width: 800px; margin: 0 auto;">
+                Live interactive demonstration and code verification for all 13 Academic Syllabus Experiments
+                integrated natively within the <strong>RailRush (TrackPulse)</strong> transit ecosystem.
+            </p>
+        </div>
+
+        <!-- Quick Jump Navigation -->
+        <div class="exp-nav">
+            <strong style="align-self: center; margin-right: 8px; color: var(--primary-color);">Jump to Exp:</strong>
+            <a href="#exp01">01: Classes &amp; Objects</a>
+            <a href="#exp02">02: Overloading</a>
+            <a href="#exp03">03: Inheritance &amp; Exceptions</a>
+            <a href="#exp04">04: Generic &amp; HTTP Servlet</a>
+            <a href="#exp05">05: JSP + JDBC Login</a>
+            <a href="#exp06">06: JSP Implicit Objects</a>
+            <a href="#exp07">07: HTML/CSS/JS Web</a>
+            <a href="#exp08">08: JS Email Validation</a>
+            <a href="#exp09">09: DOM 5s Color</a>
+            <a href="#exp10">10: React Hooks 4 Colors</a>
+            <a href="#exp11">11: React SPA</a>
+            <a href="#exp12">12: Spring Boot Monolith</a>
+            <a href="#exp13">13: Spring Boot REST API</a>
+        </div>
+
+        <!-- Experiment 01 -->
+        <div class="exp-card" id="exp01">
+            <span class="exp-badge">EXPERIMENT 01</span>
+            <h2>Programs on Classes and Objects</h2>
+            <p><strong>Syllabus Concept:</strong> Object-Oriented Modeling, Encapsulation, State preservation, and Data Accessors.</p>
+            <p>
+                In <strong>RailRush</strong>, core railway transit entities (<code>Train</code>, <code>Passenger</code>, <code>Ticket</code>, <code>User</code>)
+                encapsulate critical fields via private attributes with type-safe getter and setter methods.
+            </p>
+            <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                <h4 style="margin-top:0;">Live Instantiated Object Output:</h4>
+                <ul>
+                    <li><strong>Train Object:</strong> Jan Shatabdi Express (#12051)</li>
+                    <li><strong>Route:</strong> CSMT Mumbai &rarr; Madgaon (Goa)</li>
+                    <li><strong>Schedule:</strong> 05:10 &mdash; 14:30</li>
+                    <li><strong>Available Seats:</strong> 342 / 500</li>
+                </ul>
+            </div>
+            <div class="code-box">Source: src/main/java/com/railrush/model/Train.java</div>
+        </div>
+
+        <!-- Experiment 02 -->
+        <div class="exp-card" id="exp02">
+            <span class="exp-badge">EXPERIMENT 02</span>
+            <h2>Programs on Method and Constructor Overloading</h2>
+            <p><strong>Syllabus Concept:</strong> Polymorphic constructor initialization and parametric method overloading.</p>
+            <p>
+                <code>Train.java</code> provides multiple overloaded constructors for lightweight catalog listing versus full journey tariffs.
+                Similarly, <code>TrainDAO</code> overloads <code>searchTrain(String trainNumber)</code> and <code>searchTrain(String src, String dest)</code>.
+            </p>
+            <div class="code-box">
+// Overloaded Constructor 1: Minimal lookup constructor
+public Train(String trainNumber, String trainName) { ... }
+
+// Overloaded Constructor 2: Full route and fare specification
+public Train(String trainNumber, String trainName, String source, String dest,
+             LocalTime dep, LocalTime arr, int seats, int avail, double sl, double ac) { ... }
+            </div>
+        </div>
+
+        <!-- Experiment 03 -->
+        <div class="exp-card" id="exp03">
+            <span class="exp-badge">EXPERIMENT 03</span>
+            <h2>Programs on Various Types of Inheritance and Exception Handling</h2>
+            <p><strong>Syllabus Concept:</strong> Hierarchical Inheritance (<code>PassengerUser extends User</code>, <code>AdminUser extends User</code>) and Custom Domain Exceptions.</p>
+            <p>
+                Domain exceptions (<code>SeatUnavailableException</code>, <code>InvalidPNRException</code>, <code>BookingFailedException</code>)
+                enforce transaction boundaries and prevent overselling during high-demand booking rushes.
+            </p>
+            <button class="btn btn-sm btn-secondary" onclick="triggerCustomExceptionDemo()">Simulate SeatUnavailableException</button>
+            <div id="exceptionResult" style="margin-top: 10px; font-weight: bold;"></div>
+            <script>
+                function triggerCustomExceptionDemo() {
+                    document.getElementById('exceptionResult').innerHTML = 
+                        "<span style='color: #dc2626;'>[CAUGHT EXCEPTION] com.railrush.exception.SeatUnavailableException: Requested 5 berths exceeds available quota (0 available). Transaction safely rolled back.</span>";
+                }
+            </script>
+        </div>
+
+        <!-- Experiment 04 -->
+        <div class="exp-card" id="exp04">
+            <span class="exp-badge">EXPERIMENT 04</span>
+            <h2>Program on Implementing Generic and HTTP Servlet</h2>
+            <p><strong>Syllabus Concept:</strong> Protocol-independent <code>GenericServlet</code> versus HTTP-specific <code>HttpServlet</code>.</p>
+            <p>
+                RailRush includes <code>GenericRailStatusServlet</code> (inheriting directly from <code>jakarta.servlet.GenericServlet</code>
+                and overriding <code>service(ServletRequest, ServletResponse)</code>) alongside production <code>HttpServlet</code> controllers.
+            </p>
+            <div class="code-box">
+public class GenericRailStatusServlet extends GenericServlet {
+    @Override
+    public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
+        res.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = res.getWriter();
+        out.println("<h2>RailRush Protocol Gateway (GenericServlet)</h2>");
+    }
+}
+            </div>
+        </div>
+
+        <!-- Experiment 05 -->
+        <div class="exp-card" id="exp05">
+            <span class="exp-badge">EXPERIMENT 05</span>
+            <h2>Design a Login Webpage in JSP that Validates via Database using JDBC &amp; Calls Servlet</h2>
+            <p><strong>Syllabus Concept:</strong> Secure JSP presentation with SQL-injection resistant <code>PreparedStatement</code> and JDBC transactions.</p>
+            <p>
+                <code>login.jsp</code> / <code>login.html</code> submits credentials to <code>LoginServlet.java</code>, which queries MySQL via <code>DBConnection.java</code>.
+            </p>
+            <a href="login.html" class="btn btn-sm">Open Live Login Portal (login.html) &rarr;</a>
+        </div>
+
+        <!-- Experiment 06 -->
+        <div class="exp-card" id="exp06">
+            <span class="exp-badge">EXPERIMENT 06</span>
+            <h2>Program on Implicit and Explicit Objects in JSP</h2>
+            <p><strong>Syllabus Concept:</strong> JSP Implicit Objects (<code>session</code>, <code>request</code>, <code>application</code>, <code>out</code>, <code>config</code>, <code>pageContext</code>) and Explicit Action Tags (<code>&lt;jsp:useBean&gt;</code>, <code>&lt;jsp:getProperty&gt;</code>).</p>
+            <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                <h4 style="margin-top:0;">JSP Implicit Object Architecture:</h4>
+                <ul>
+                    <li><strong><code>session</code>:</strong> Preserves authenticated user state (<code>userId</code>, <code>userRole</code>) across booking requests.</li>
+                    <li><strong><code>request</code>:</strong> Passes train search parameters and request-scoped attributes to result views.</li>
+                    <li><strong><code>out</code>:</strong> Dynamic stream writer outputting personalized HTML buffers.</li>
+                    <li><strong><code>&lt;jsp:useBean&gt;</code>:</strong> Instantiates domain beans (e.g. <code>Ticket</code> bean in <code>ticket_confirmation.jsp</code>).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Experiment 07 -->
+        <div class="exp-card" id="exp07">
+            <span class="exp-badge">EXPERIMENT 07</span>
+            <h2>Program to Create a Website Using HTML, CSS, and JavaScript</h2>
+            <p><strong>Syllabus Concept:</strong> Responsive web layout, CSS3 custom properties, flexbox/grid architectures, and interactive DOM validation.</p>
+            <p>RailRush features a responsive UI with custom stylesheets (<code>css/style.css</code>) and interactive scripts.</p>
+            <a href="index.html" class="btn btn-sm">View RailRush Homepage (index.html) &rarr;</a>
+        </div>
+
+        <!-- Experiment 08 -->
+        <div class="exp-card" id="exp08">
+            <span class="exp-badge">EXPERIMENT 08</span>
+            <h2>Program Using JavaScript to Validate Email Address ('@' and '.' check with alert box)</h2>
+            <p><strong>Syllabus Specification:</strong> Check the presence of &ldquo;@&rdquo; &amp; &ldquo;.&rdquo; characters. If missing, the script displays an alert box reporting the error and asks the user to re-enter it again.</p>
+            <div style="background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #cbd5e1; max-width: 550px;">
+                <div class="form-group">
+                    <label for="testEmailInput">Enter Email for Validation Test:</label>
+                    <input type="text" id="testEmailInput" class="form-control" placeholder="e.g. user_at_example_dot_com" value="userexample">
+                </div>
+                <button type="button" class="btn btn-secondary" onclick="validateEmailPresence('testEmailInput')">
+                    Run Email Character Validation &rarr;
+                </button>
+            </div>
+            <div class="code-box">Source: js/exp08_email_validation.js</div>
+        </div>
+
+        <!-- Experiment 09 -->
+        <div class="exp-card" id="exp09">
+            <span class="exp-badge">EXPERIMENT 09</span>
+            <h2>Program Based on Document Object Model to Change Background Color Automatically Every 5 Seconds</h2>
+            <p><strong>Syllabus Specification:</strong> DOM-based automatic background color rotation triggered every 5000ms using <code>setInterval()</code>.</p>
+            
+            <div id="domColorContainer" style="padding: 24px; border-radius: 12px; background: #0f172a; color: #ffffff; margin-top: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <h4 style="margin: 0; color: #38bdf8;">Interactive DOM Color Canvas</h4>
+                        <p style="margin: 4px 0 0; font-size: 0.9rem; color: #cbd5e1;">
+                            Active Palette Theme: <strong id="activeColorName">Midnight Navy (#0f172a)</strong>
+                        </p>
+                    </div>
+                    <div>
+                        <span id="domColorStatus" class="badge badge-warning">PAUSED</span>
+                        <span style="margin-left: 10px; font-weight: bold; color: #f59e0b;">Next Tick: <span id="countdownTimer">5s</span></span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap;">
+                    <button class="btn btn-sm btn-secondary" onclick="startDomColorChanger('domColorContainer')">Start 5-Second Interval</button>
+                    <button class="btn btn-sm" style="background: #64748b;" onclick="stopDomColorChanger()">Pause Color Cycling</button>
+                    <button class="btn btn-sm" style="background: #0284c7;" onclick="changeBackgroundColor('domColorContainer')">Step Next Color Now</button>
+                </div>
+            </div>
+            <div class="code-box">Source: js/exp09_dom_color.js</div>
+        </div>
+
+        <!-- Experiment 10 -->
+        <div class="exp-card" id="exp10">
+            <span class="exp-badge">EXPERIMENT 10</span>
+            <h2>Program for Making Use of React Hooks: Four Buttons ("Red", "Blue", "Green", "Yellow")</h2>
+            <p><strong>Syllabus Specification:</strong> Displays four buttons namely, &ldquo;Red&rdquo;, &ldquo;Blue&rdquo;, &ldquo;Green&rdquo;, &ldquo;Yellow&rdquo;. On clicking any button, displays the message that you have selected that particular color using React Hooks.</p>
+            
+            <!-- React Mount Container -->
+            <div id="reactColorHooksRoot" style="margin-top: 15px;"></div>
+            
+            <!-- Mount Script -->
+            <script src="js/exp10_react_color_hooks.js"></script>
+        </div>
+
+        <!-- Experiment 11 -->
+        <div class="exp-card" id="exp11">
+            <span class="exp-badge">EXPERIMENT 11</span>
+            <h2>Creating a Single Page Website Using Concepts in React (Hooks, Router, Props and States)</h2>
+            <p><strong>Syllabus Specification:</strong> Full Single Page Application (SPA) leveraging React Functional Components, <code>useState</code> &amp; <code>useEffect</code> Hooks, simulated Router, hierarchical Props passing, and local Component States.</p>
+            <p>RailRush includes a dedicated full-featured React SPA for high-speed train search, live TrackPulse telemetry, and instant seat reservation.</p>
+            <a href="spa.html" class="btn">Launch Dedicated React Single Page App (spa.html) &rarr;</a>
+        </div>
+
+        <!-- Experiment 12 -->
+        <div class="exp-card" id="exp12">
+            <span class="exp-badge">EXPERIMENT 12</span>
+            <h2>Program to Create a Monolithic Application Using Spring Boot</h2>
+            <p><strong>Syllabus Specification:</strong> Spring Boot Monolithic Architecture integrating Server-Side Rendering (SSR), Spring Service Layer, Dependency Injection, and unified data repositories.</p>
+            <div class="code-box">
+@SpringBootApplication
+public class RailRushSpringBootApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(RailRushSpringBootApplication.class, args);
+    }
+}
+            </div>
+            <p>Features Monolithic Controller: <code>com.railrush.springboot.controller.RailRushMonolithController</code> coordinating web views with <code>TrainService</code> and <code>BookingService</code>.</p>
+        </div>
+
+        <!-- Experiment 13 -->
+        <div class="exp-card" id="exp13">
+            <span class="exp-badge">EXPERIMENT 13</span>
+            <h2>Program for Building RESTful APIs with Spring Boot</h2>
+            <p><strong>Syllabus Specification:</strong> Enterprise REST API controllers utilizing <code>@RestController</code>, <code>@GetMapping</code>, <code>@PostMapping</code>, JSON serialization, and HTTP status codes.</p>
+            
+            <!-- Interactive REST API Explorer -->
+            <div style="background: #0f172a; color: #f8fafc; padding: 20px; border-radius: 12px; margin-top: 15px;">
+                <h4 style="margin-top: 0; color: #38bdf8;">⚡ Interactive RESTful API Sandbox</h4>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px;">
+                    <button class="btn btn-sm btn-secondary" onclick="simulateRestApi('/api/v1/health')">GET /api/v1/health</button>
+                    <button class="btn btn-sm" style="background: #0284c7;" onclick="simulateRestApi('/api/v1/trains')">GET /api/v1/trains</button>
+                    <button class="btn btn-sm" style="background: #0d9488;" onclick="simulateRestApi('/api/v1/pnr/RR84920194')">GET /api/v1/pnr/RR84920194</button>
+                    <button class="btn btn-sm" style="background: #e11d48;" onclick="simulateRestApi('/api/v1/telemetry/12051')">GET /api/v1/telemetry/12051</button>
+                </div>
+                <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 6px;">
+                    Status: <span id="restStatus" style="color: #4ade80; font-weight: bold;">200 OK</span> | Endpoint: <code id="restEndpoint">/api/v1/health</code>
+                </div>
+                <pre id="restResponseBox" style="background: #1e293b; color: #38bdf8; padding: 14px; border-radius: 8px; font-size: 0.85rem; margin: 0; overflow-x: auto;"></pre>
+            </div>
+            <script>
+                const restMockResponses = {
+                    "/api/v1/health": {
+                        service: "RailRush REST API Gateway",
+                        status: "UP",
+                        timestamp: new Date().toISOString(),
+                        version: "1.0.0 (Spring Boot 3.x / Java 26)",
+                        experiment: "Exp 13: Building RESTful APIs with Spring Boot"
+                    },
+                    "/api/v1/trains": [
+                        { trainNumber: "12051", trainName: "Jan Shatabdi Express", sourceStation: "CSMT Mumbai", destinationStation: "Madgaon (Goa)", departureTime: "05:10:00", arrivalTime: "14:30:00", availableSeats: 342, fareSleeper: 320.0, fareAC: 1050.0 },
+                        { trainNumber: "22221", trainName: "Rajdhani Express", sourceStation: "CSMT Mumbai", destinationStation: "Hazrat Nizamuddin", departureTime: "16:00:00", arrivalTime: "09:55:00", availableSeats: 89, fareSleeper: 650.0, fareAC: 2450.0 }
+                    ],
+                    "/api/v1/pnr/RR84920194": {
+                        pnrNumber: "RR84920194",
+                        status: "CONFIRMED",
+                        trainNumber: "12051",
+                        trainName: "Jan Shatabdi Express",
+                        passengerName: "Aarya Chavan",
+                        travelClass: "AC_3_TIER",
+                        totalFare: 1050.0,
+                        allocatedBerth: "Coach B2 - Berth 31 (Lower)"
+                    },
+                    "/api/v1/telemetry/12051": {
+                        trainNumber: "12051",
+                        trainName: "Jan Shatabdi Express",
+                        currentStation: "Ratnagiri Junction",
+                        nextStation: "Madgaon (Goa)",
+                        delayMinutes: 0,
+                        status: "ON TIME",
+                        platform: 2,
+                        lastPing: new Date().toISOString()
+                    }
+                };
+
+                function simulateRestApi(endpoint) {
+                    document.getElementById('restEndpoint').textContent = endpoint;
+                    document.getElementById('restStatus').textContent = "200 OK";
+                    document.getElementById('restResponseBox').textContent = JSON.stringify(restMockResponses[endpoint], null, 2);
+                }
+
+                // Initial rest load
+                simulateRestApi('/api/v1/health');
+            </script>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 RailRush (TrackPulse). Full Stack Java Engineering Project &amp; Laboratory Suite.</p>
+    </footer>
+</body>
+</html>
