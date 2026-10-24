@@ -1,7 +1,7 @@
 /**
- * Experiment 11: Single Page Application (SPA) using React.
- * Concepts Demonstrated: React Hooks (useState, useEffect), Router (hash-based SPA navigation),
- * Component Props, and State Management.
+ * RailRush - Single Page Application (SPA) using React.
+ * High-performance client-side routing, responsive train search,
+ * live telemetry polling, and instant ACID seat reservation.
  */
 
 const { useState, useEffect } = React;
@@ -14,14 +14,13 @@ const INITIAL_TRAINS = [
     { number: "11019", name: "Konark Express", from: "CSMT Mumbai", to: "Bhubaneswar", dept: "14:00", arr: "04:15", fareSL: 580, fareAC: 1980, available: 8, status: "25m LATE" }
 ];
 
-// Component 1: Navigation Header (Receives Props: activeTab, onNavigate)
+// Component 1: Navigation Header
 function SPANavbar({ activeTab, onNavigate }) {
     const navItems = [
         { id: "home", label: "🏠 Home" },
         { id: "search", label: "🚆 Find Trains" },
         { id: "telemetry", label: "📡 Live TrackPulse" },
-        { id: "pnr", label: "🎫 PNR Status" },
-        { id: "experiments", label: "🧪 Lab Experiments" }
+        { id: "pnr", label: "🎫 PNR Status" }
     ];
 
     return (
@@ -39,7 +38,7 @@ function SPANavbar({ activeTab, onNavigate }) {
                 <span style={{ fontSize: '1.8rem' }}>🚆</span>
                 <div>
                     <h2 style={{ margin: 0, color: '#38bdf8', fontSize: '1.4rem' }}>RailRush <span style={{ color: '#f97316' }}>SPA</span></h2>
-                    <small style={{ color: '#94a3b8' }}>Exp 11: React Hooks, Router, Props &amp; States</small>
+                    <small style={{ color: '#94a3b8' }}>Real-Time Railway Ticketing &amp; Movement Telemetry</small>
                 </div>
             </div>
 
@@ -62,12 +61,28 @@ function SPANavbar({ activeTab, onNavigate }) {
                         {item.label}
                     </button>
                 ))}
+                <a
+                    href="index.html"
+                    style={{
+                        background: 'transparent',
+                        color: '#94a3b8',
+                        border: '1px solid #475569',
+                        padding: '8px 16px',
+                        borderRadius: '8px',
+                        fontWeight: '600',
+                        textDecoration: 'none',
+                        display: 'flex',
+                        alignItems: 'center'
+                    }}
+                >
+                    &larr; Main Site
+                </a>
             </nav>
         </header>
     );
 }
 
-// Component 2: Train Card (Demonstrates Props passing)
+// Component 2: Train Card
 function TrainCard({ train, onBook }) {
     return (
         <div style={{
@@ -140,7 +155,7 @@ function TrainCard({ train, onBook }) {
     );
 }
 
-// Main SPA Application Component (Demonstrates State & Hooks)
+// Main SPA Application Component
 function RailRushSPA() {
     const [currentRoute, setCurrentRoute] = useState("home");
     const [trains, setTrains] = useState(INITIAL_TRAINS);
@@ -154,7 +169,7 @@ function RailRushSPA() {
     const [bookingSuccess, setBookingSuccess] = useState(null);
     const [tick, setTick] = useState(0);
 
-    // useEffect hook to simulate live telemetry timer every 3 seconds
+    // Live telemetry simulation timer
     useEffect(() => {
         const interval = setInterval(() => {
             setTick(prev => prev + 1);
@@ -162,7 +177,7 @@ function RailRushSPA() {
         return () => clearInterval(interval);
     }, []);
 
-    // Filter trains using state
+    // Filter trains
     const filteredTrains = trains.filter(t =>
         t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         t.from.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -218,7 +233,7 @@ function RailRushSPA() {
             setPnrResult({
                 pnr: pnrInput.trim(),
                 passengerName: "Aarya Chavan",
-                passengerAge: 20,
+                passengerAge: 21,
                 trainName: "12051 Jan Shatabdi Express",
                 trainNumber: "12051",
                 travelClass: "AC 3 TIER",
@@ -249,8 +264,8 @@ function RailRushSPA() {
                                 🚆 RailRush Single Page Application
                             </h1>
                             <p style={{ fontSize: '1.15rem', color: '#cbd5e1', maxWidth: '700px', margin: '0 auto 24px' }}>
-                                A modern, client-side routed railway ticket booking and telemetry portal built strictly with
-                                React Functional Components, Hooks (<code>useState</code>, <code>useEffect</code>), Props, and State Management.
+                                A modern, client-side routed railway ticket booking and telemetry portal engineered with
+                                React Functional Components, reactive state management, and real-time fleet synchronization.
                             </p>
                             <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
                                 <button
@@ -293,12 +308,12 @@ function RailRushSPA() {
                                 <p style={{ color: '#94a3b8' }}>State mutations trigger instantaneous sub-tree updates without full browser reloading.</p>
                             </div>
                             <div style={{ background: '#162447', padding: '24px', borderRadius: '12px', borderLeft: '4px solid #f97316' }}>
-                                <h3>📦 Decoupled Props Delegation</h3>
-                                <p style={{ color: '#94a3b8' }}>Train model objects and callbacks are routed down to modular view components via clean React Props.</p>
+                                <h3>📦 High-Speed Seat Allocation</h3>
+                                <p style={{ color: '#94a3b8' }}>Real-time quota validation and automated 10-digit PNR generation upon booking.</p>
                             </div>
                             <div style={{ background: '#162447', padding: '24px', borderRadius: '12px', borderLeft: '4px solid #4ade80' }}>
-                                <h3>🧭 Client-Side SPA Router</h3>
-                                <p style={{ color: '#94a3b8' }}>Navigation switches cleanly among Home, Search, Telemetry, and PNR modules within one single document lifecycle.</p>
+                                <h3>🧭 Live Telemetry Telemetry</h3>
+                                <p style={{ color: '#94a3b8' }}>Real-time station arrival monitoring, platform indicator feeds, and live delay tracking.</p>
                             </div>
                         </div>
                     </div>
@@ -444,7 +459,7 @@ function RailRushSPA() {
                     <div>
                         <div style={{ marginBottom: '24px' }}>
                             <h2 style={{ margin: 0, color: '#38bdf8' }}>📡 TrackPulse Real-Time Telemetry Feed</h2>
-                            <p style={{ color: '#94a3b8', margin: '4px 0 0' }}>Live status simulated via React <code>useEffect</code> timer (Pulse #{tick})</p>
+                            <p style={{ color: '#94a3b8', margin: '4px 0 0' }}>Live satellite status feed (Update pulse #{tick})</p>
                         </div>
 
                         <div style={{ background: '#1e293b', borderRadius: '12px', padding: '24px', border: '1px solid #334155' }}>
@@ -512,7 +527,7 @@ function RailRushSPA() {
 
                             {pnrResult && (
                                 <div style={{ background: '#0f172a', padding: '24px', borderRadius: '12px', border: '1px solid #38bdf8' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #334155', paddingBottom: '12px', marginBottom: '14px' }}>
+                                    <div style={{ display: 'flex', justifyContext: 'space-between', borderBottom: '1px solid #334155', paddingBottom: '12px', marginBottom: '14px' }}>
                                         <h3 style={{ margin: 0, color: '#38bdf8' }}>PNR: {pnrResult.pnr}</h3>
                                         <span style={{ color: '#4ade80', fontWeight: 'bold' }}>{pnrResult.status || "CONFIRMED"}</span>
                                     </div>
@@ -523,33 +538,6 @@ function RailRushSPA() {
                                 </div>
                             )}
                         </div>
-                    </div>
-                )}
-
-                {/* Route 5: Experiments Overview Link */}
-                {currentRoute === "experiments" && (
-                    <div style={{ textAlign: 'center', background: '#1e293b', padding: '40px', borderRadius: '16px', border: '1px solid #334155' }}>
-                        <h2 style={{ color: '#38bdf8' }}>🔬 Full Stack Java Laboratory Suite (Exp 01 - 13)</h2>
-                        <p style={{ color: '#94a3b8', maxWidth: '650px', margin: '0 auto 24px' }}>
-                            This Single Page Application fulfills <strong>Experiment 11</strong> (React Hooks, Router, Props &amp; States).
-                            You can explore all other experiments including <strong>Experiment 10</strong> (React Hooks 4 Color Buttons),
-                            <strong>Experiment 08</strong> (Email presence validator), <strong>Experiment 09</strong> (DOM Color Changer),
-                            and <strong>Experiments 12 &amp; 13</strong> (Spring Boot Monolith &amp; REST APIs) in the master lab suite!
-                        </p>
-                        <a
-                            href="experiments.jsp"
-                            style={{
-                                display: 'inline-block',
-                                background: '#f97316',
-                                color: '#fff',
-                                textDecoration: 'none',
-                                padding: '12px 28px',
-                                borderRadius: '8px',
-                                fontWeight: 'bold'
-                            }}
-                        >
-                            Open Master Lab Suite (experiments.jsp) &rarr;
-                        </a>
                     </div>
                 )}
             </main>
