@@ -28,7 +28,9 @@ CREATE TABLE IF NOT EXISTS trains (
     total_seats INT NOT NULL DEFAULT 500,
     available_seats INT NOT NULL DEFAULT 500,
     fare_sleeper DECIMAL(8,2) NOT NULL,
-    fare_ac DECIMAL(8,2) NOT NULL
+    fare_ac DECIMAL(8,2) NOT NULL,
+    category VARCHAR(20) NOT NULL DEFAULT 'INTERCITY',
+    local_fare_multiplier DOUBLE NOT NULL DEFAULT 0.6
 );
 
 -- 3. Bookings Table

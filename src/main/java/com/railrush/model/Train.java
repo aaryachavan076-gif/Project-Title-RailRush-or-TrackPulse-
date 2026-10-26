@@ -17,6 +17,30 @@ public class Train {
     private double fareSleeper;
     private double fareAc;
 
+    public enum TrainCategory {
+        INTERCITY,
+        LOCAL
+    }
+
+    private TrainCategory category = TrainCategory.INTERCITY;
+    private double localFareMultiplier = 0.6;
+
+    public TrainCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(TrainCategory category) {
+        this.category = category;
+    }
+
+    public double getLocalFareMultiplier() {
+        return localFareMultiplier;
+    }
+
+    public void setLocalFareMultiplier(double localFareMultiplier) {
+        this.localFareMultiplier = localFareMultiplier;
+    }
+
     // Overloaded Constructor 1: Default
     public Train() {
     }

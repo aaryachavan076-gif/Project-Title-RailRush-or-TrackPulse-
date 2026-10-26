@@ -55,6 +55,10 @@ public class BookTicketServlet extends HttpServlet {
             double fare = "AC_TIER".equalsIgnoreCase(travelClass) || "AC".equalsIgnoreCase(travelClass)
                     ? train.getFareAc()
                     : train.getFareSleeper();
+            // Apply local fare multiplier if this is a local train
+            if (train.getCategory() == Train.TrainCategory.LOCAL) {
+                fare = fare * train.getLocalFareMultiplier();
+            }
 
             Ticket ticket = new Ticket();
             ticket.setUserId(userId);

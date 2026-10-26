@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.railrush</groupId>
+    <artifactId>railrush-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>Experiment01_ClassesObjects</module>
+        <module>Experiment02_Overloading</module>
+        <module>Experiment03_Inheritance</module>
+        <module>Experiment04_GenericsServlet</module>
+        <module>Experiment05_JSPLogin</module>
+        <module>Experiment06_JSPObjects</module>
+        <module>Experiment07_Website</module>
+        <module>Experiment08_EmailValidation</module>
+        <module>Experiment09_BGChange</module>
+        <module>Experiment10_ReactHooks</module>
+        <module>Experiment11_ReactSPA</module>
+        <module>Experiment12_SpringBootMonolith</module>
+        <module>Experiment13_SpringBootREST</module>
+    </modules>
+    <properties>
+        <java.version>17</java.version>
+    </properties>
+</project>

@@ -14,8 +14,8 @@ public class TrainDAO implements GenericDAO<Train, String> {
     @Override
     public void save(Train train) throws Exception {
         String sql = "INSERT INTO trains (train_number, train_name, source_station, destination_station, " +
-                     "departure_time, arrival_time, total_seats, available_seats, fare_sleeper, fare_ac) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                     "departure_time, arrival_time, total_seats, available_seats, fare_sleeper, fare_ac, category, local_fare_multiplier) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, train.getTrainNumber());
@@ -28,6 +28,9 @@ public class TrainDAO implements GenericDAO<Train, String> {
             ps.setInt(8, train.getAvailableSeats());
             ps.setDouble(9, train.getFareSleeper());
             ps.setDouble(10, train.getFareAc());
+            // New columns for local train support
+            ps.setString(11, train.getCategory().name());
+            ps.setDouble(12, train.getLocalFareMultiplier());
             ps.executeUpdate();
         }
     }
@@ -115,6 +118,13 @@ public class TrainDAO implements GenericDAO<Train, String> {
         t.setAvailableSeats(rs.getInt("available_seats"));
         t.setFareSleeper(rs.getDouble("fare_sleeper"));
         t.setFareAc(rs.getDouble("fare_ac"));
+        // New columns for local train support
+        String cat = rs.getString("category");
+        if (cat != null) {
+            t.setCategory(Train.TrainCategory.valueOf(cat));
+        }
+        double mult = rs.getDouble("local_fare_multiplier");
+        t.setLocalFareMultiplier(mult);
         return t;
     }
 }
