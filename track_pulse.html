@@ -161,6 +161,106 @@
             .station-label { font-size:0.6rem; max-width:52px; }
             .train-icon    { font-size:1.4rem; }
         }
+
+        /* ══════════════════════════════════════
+           MUMBAI LOCAL TRAINS — extra styles
+        ══════════════════════════════════════ */
+        .local-section {
+            background: linear-gradient(135deg, #1a1035 0%, #2d1b69 100%);
+            border-radius: 16px; padding: 28px;
+            margin-top: 24px; color: white; position: relative; overflow: hidden;
+        }
+        .local-section::before {
+            content:""; position:absolute; inset:0; pointer-events:none;
+            background: repeating-linear-gradient(
+                45deg, transparent, transparent 30px,
+                rgba(255,255,255,0.015) 30px, rgba(255,255,255,0.015) 31px
+            );
+        }
+        /* Line tabs */
+        .line-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+        .line-tab {
+            padding:7px 18px; border-radius:8px; border:2px solid transparent;
+            font-size:0.85rem; font-weight:700; cursor:pointer; transition:all 0.2s;
+            letter-spacing:0.3px;
+        }
+        .line-tab.wr       { border-color:#f59e0b; color:#f59e0b; background:rgba(245,158,11,0.1); }
+        .line-tab.wr.active{ background:#f59e0b; color:#000; }
+        .line-tab.cr       { border-color:#ef4444; color:#ef4444; background:rgba(239,68,68,0.1); }
+        .line-tab.cr.active{ background:#ef4444; color:#fff; }
+        .line-tab.hr       { border-color:#06b6d4; color:#06b6d4; background:rgba(6,182,212,0.1); }
+        .line-tab.hr.active{ background:#06b6d4; color:#fff; }
+
+        /* Rush meter */
+        .rush-bar-wrap { display:flex; align-items:center; gap:10px; }
+        .rush-bar-bg {
+            flex:1; height:8px; border-radius:4px;
+            background:rgba(255,255,255,0.1); overflow:hidden;
+        }
+        .rush-bar-fill { height:100%; border-radius:4px; transition:width 0.6s ease; }
+        .rush-low    { background:linear-gradient(90deg,#22c55e,#4ade80); }
+        .rush-medium { background:linear-gradient(90deg,#f59e0b,#fbbf24); }
+        .rush-high   { background:linear-gradient(90deg,#ef4444,#f87171); }
+
+        /* Local train grid */
+        .local-grid {
+            display:grid; grid-template-columns:repeat(auto-fill, minmax(290px, 1fr));
+            gap:14px; margin-top:4px;
+        }
+        .local-card {
+            background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1);
+            border-radius:12px; padding:16px; transition:background 0.2s;
+            position:relative; overflow:hidden;
+        }
+        .local-card:hover { background:rgba(255,255,255,0.1); }
+        .local-card .train-no {
+            font-size:0.75rem; font-weight:700; letter-spacing:1px;
+            color:#a78bfa; margin-bottom:4px; text-transform:uppercase;
+        }
+        .local-card .train-name {
+            font-size:1rem; font-weight:700; color:#f1f5f9; margin-bottom:2px;
+        }
+        .local-card .route-line {
+            font-size:0.8rem; color:#94a3b8; margin-bottom:12px;
+        }
+        .local-card .info-row {
+            display:flex; justify-content:space-between; align-items:center;
+            margin-bottom:10px; flex-wrap:wrap; gap:6px;
+        }
+        .local-card .next-dep {
+            font-size:1.1rem; font-weight:800; color:#c4b5fd;
+            font-variant-numeric:tabular-nums;
+        }
+        .local-card .countdown {
+            font-size:0.78rem; color:#7c3aed; background:rgba(124,58,237,0.15);
+            border:1px solid rgba(124,58,237,0.3); border-radius:6px;
+            padding:2px 8px; font-weight:700; font-variant-numeric:tabular-nums;
+        }
+        .crowd-label { font-size:0.68rem; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+        .delay-pill {
+            font-size:0.72rem; font-weight:700; padding:2px 8px;
+            border-radius:999px; white-space:nowrap;
+        }
+        .delay-ok     { background:#dcfce7; color:#15803d; }
+        .delay-slight { background:#fef9c3; color:#92400e; }
+        .delay-late   { background:#fee2e2; color:#b91c1c; }
+
+        /* Peak hours info strip */
+        .peak-info {
+            background:rgba(0,0,0,0.25); border-radius:10px;
+            padding:14px 18px; margin-bottom:20px;
+            display:flex; flex-wrap:wrap; gap:16px; align-items:center;
+        }
+        .peak-info .peak-badge {
+            padding:4px 12px; border-radius:999px; font-size:0.8rem; font-weight:700;
+        }
+        .peak-now { background:#7c3aed; color:#fff; }
+        .off-peak { background:#065f46; color:#6ee7b7; }
+        .peak-legend { display:flex; gap:10px; flex-wrap:wrap; }
+        .peak-legend span {
+            font-size:0.78rem; display:flex; align-items:center; gap:5px; color:#94a3b8;
+        }
+        .legend-dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
     </style>
 </head>
 <body>
@@ -277,6 +377,51 @@
                 </table>
             </div>
         </div>
+
+        <!-- ══════════  MUMBAI LOCAL TRAINS  ══════════ -->
+        <div class="local-section">
+            <div class="section-header">
+                <div>
+                    <h2 style="margin:0 0 4px;font-size:1.5rem;">🚇 Mumbai Local Trains — Live Board</h2>
+                    <p style="color:#a78bfa;margin:0;font-size:0.88rem;">
+                        Western · Central · Harbour Lines &mdash; rush hours, crowd &amp; delay at a glance
+                    </p>
+                </div>
+                <span class="live-dot" style="border-color:rgba(167,139,250,0.5);color:#c4b5fd;background:rgba(124,58,237,0.15);">
+                    SUBURBAN FEED
+                </span>
+            </div>
+
+            <!-- Peak-hour info strip -->
+            <div class="peak-info">
+                <div>
+                    <div style="font-size:0.78rem;color:#64748b;margin-bottom:4px;">CURRENT RUSH STATUS</div>
+                    <span class="peak-badge" id="rushStatusBadge">–</span>
+                </div>
+                <div class="peak-legend">
+                    <span><span class="legend-dot" style="background:#22c55e;"></span> Low Rush (10:00–17:00, 21:00+)</span>
+                    <span><span class="legend-dot" style="background:#f59e0b;"></span> Moderate (07:00–09:00 up, 18:00–21:00 down)</span>
+                    <span><span class="legend-dot" style="background:#ef4444;"></span> Peak Hour (07:30–10:00 &amp; 17:30–20:00)</span>
+                </div>
+                <div style="margin-left:auto;">
+                    <div style="font-size:0.72rem;color:#64748b;">Next departure in</div>
+                    <div id="globalCountdown" style="font-size:1.4rem;font-weight:800;color:#c4b5fd;font-variant-numeric:tabular-nums;">–</div>
+                </div>
+            </div>
+
+            <!-- Line selector tabs -->
+            <div class="line-tabs">
+                <div class="line-tab wr active" onclick="switchLine('WR')">🟡 Western Line</div>
+                <div class="line-tab cr"        onclick="switchLine('CR')">🔴 Central Line</div>
+                <div class="line-tab hr"        onclick="switchLine('HR')">🔵 Harbour Line</div>
+            </div>
+
+            <!-- Line name banner -->
+            <div id="lineBanner" style="margin-bottom:16px;"></div>
+
+            <!-- Cards grid -->
+            <div class="local-grid" id="localGrid"></div>
+        </div><!-- /local-section -->
 
     </div><!-- /container -->
 
@@ -502,6 +647,313 @@
     renderLiveMap();
     renderTable();
     setInterval(() => { simulateMotion(); renderLiveMap(); renderTable(); }, 5000);
+
+
+    // ╔══════════════════════════════════════════════════════════════╗
+    // ║          MUMBAI LOCAL TRAINS — DATA & ENGINE                ║
+    // ╚══════════════════════════════════════════════════════════════╝
+
+    // Peak hour rules (IST):  7:30–10:00 and 17:30–20:00 = PEAK
+    //                         7:00–7:30, 10:00–12:00, 17:00–17:30, 20:00–21:00 = MODERATE
+    //                         rest = LOW
+    function getRushLevel(h, m) {
+        const t = h * 60 + m;
+        if ((t >= 450 && t < 600) || (t >= 1050 && t < 1200)) return 'high';   // 7:30–10, 17:30–20
+        if ((t >= 420 && t < 450) || (t >= 600 && t < 720) ||
+            (t >= 1020 && t < 1050) || (t >= 1200 && t < 1260)) return 'medium'; // flanking bands
+        return 'low';
+    }
+    function rushLabel(lvl) {
+        return { high:'🔴 PEAK HOUR', medium:'🟡 MODERATE', low:'🟢 LOW RUSH' }[lvl];
+    }
+    function rushPct(lvl)   { return { high:92, medium:54, low:18 }[lvl]; }
+    function rushClass(lvl) { return { high:'rush-high', medium:'rush-medium', low:'rush-low' }[lvl]; }
+
+    // ─── LINE DATA ─────────────────────────────────────────────────
+    const LOCAL_LINES = {
+        WR: {
+            name: 'Western Line',
+            color: '#f59e0b',
+            terminus: { from:'Churchgate', to:'Dahanu Road' },
+            trains: [
+                {
+                    no:'WR-101', name:'Fast Local', type:'Fast',
+                    from:'Churchgate', to:'Virar',
+                    stops:['Churchgate','Marine Lines','Charni Road','Grant Road',
+                           'Mumbai Central','Dadar','Bandra','Andheri',
+                           'Borivali','Vasai Road','Virar'],
+                    depMins: [0, 12, 28, 43, 58],   // minutes past each hour
+                    delayMin: 0, platform:'PF-1', coaches:12, icon:'🚇'
+                },
+                {
+                    no:'WR-204', name:'Slow Local', type:'Slow',
+                    from:'Churchgate', to:'Borivali',
+                    stops:['Churchgate','Marine Lines','Charni Road','Grant Road',
+                           'Mumbai Central','Lower Parel','Elphinstone Rd','Dadar',
+                           'Matunga Road','Mahim','Bandra','Khar Road','Santacruz',
+                           'Vile Parle','Andheri','Jogeshwari','Goregaon',
+                           'Malad','Kandivali','Borivali'],
+                    depMins: [5, 20, 35, 50],
+                    delayMin: 3, platform:'PF-4', coaches:12, icon:'🚃'
+                },
+                {
+                    no:'WR-310', name:'AC Local (Raptee)', type:'AC Fast',
+                    from:'Churchgate', to:'Virar',
+                    stops:['Churchgate','Dadar','Bandra','Andheri','Borivali','Virar'],
+                    depMins: [8, 38],
+                    delayMin: 0, platform:'PF-2', coaches:12, icon:'❄️🚇'
+                },
+                {
+                    no:'WR-408', name:'Ladies Special', type:'Slow',
+                    from:'Churchgate', to:'Vasai Road',
+                    stops:['Churchgate','Grant Road','Mumbai Central','Dadar',
+                           'Bandra','Andheri','Borivali','Vasai Road'],
+                    depMins: [15, 45],
+                    delayMin: 5, platform:'PF-3', coaches:9, icon:'🚇'
+                },
+                {
+                    no:'WR-512', name:'Harbour Connector', type:'Fast',
+                    from:'Churchgate', to:'Andheri',
+                    stops:['Churchgate','Dadar','Bandra','Khar Road','Santacruz','Vile Parle','Andheri'],
+                    depMins: [3, 18, 33, 48],
+                    delayMin: 0, platform:'PF-5', coaches:12, icon:'🚇'
+                }
+            ]
+        },
+        CR: {
+            name: 'Central Line',
+            color: '#ef4444',
+            terminus: { from:'CSMT', to:'Kasara / Khopoli' },
+            trains: [
+                {
+                    no:'CR-101', name:'Fast Local (Kasara)', type:'Fast',
+                    from:'CSMT', to:'Kasara',
+                    stops:['CSMT','Byculla','Dadar','Kurla','Ghatkopar','Mulund','Thane',
+                           'Kalyan','Titwala','Kasara'],
+                    depMins: [2, 17, 32, 47],
+                    delayMin: 0, platform:'PF-1', coaches:12, icon:'🚇'
+                },
+                {
+                    no:'CR-205', name:'Slow Local (Ambernath)', type:'Slow',
+                    from:'CSMT', to:'Ambernath',
+                    stops:['CSMT','Sandhurst Road','Byculla','Chinchpokli','Currey Road',
+                           'Parel','Dadar','Matunga','Sion','Kurla','Vidyavihar',
+                           'Ghatkopar','Vikhroli','Kanjurmarg','Bhandup','Nahur',
+                           'Mulund','Thane','Dombivali','Ambernath'],
+                    depMins: [8, 22, 37, 52],
+                    delayMin: 7, platform:'PF-3', coaches:12, icon:'🚃'
+                },
+                {
+                    no:'CR-301', name:'AC Local (Main Line)', type:'AC Fast',
+                    from:'CSMT', to:'Thane',
+                    stops:['CSMT','Dadar','Kurla','Thane'],
+                    depMins: [10, 40],
+                    delayMin: 0, platform:'PF-2', coaches:12, icon:'❄️🚇'
+                },
+                {
+                    no:'CR-410', name:'Trans-Harbour Link', type:'Fast',
+                    from:'CSMT', to:'Panvel',
+                    stops:['CSMT','Kurla','Mankhurd','Vashi','Belapur','Panvel'],
+                    depMins: [5, 35],
+                    delayMin: 2, platform:'PF-6', coaches:9, icon:'🚇'
+                },
+                {
+                    no:'CR-508', name:'Slow Local (Khopoli)', type:'Slow',
+                    from:'CSMT', to:'Khopoli',
+                    stops:['CSMT','Byculla','Dadar','Kurla','Thane','Kalyan','Karjat','Khopoli'],
+                    depMins: [25, 55],
+                    delayMin: 12, platform:'PF-4', coaches:12, icon:'🚃'
+                }
+            ]
+        },
+        HR: {
+            name: 'Harbour Line',
+            color: '#06b6d4',
+            terminus: { from:'CSMT', to:'Panvel' },
+            trains: [
+                {
+                    no:'HR-101', name:'Fast (Panvel)', type:'Fast',
+                    from:'CSMT', to:'Panvel',
+                    stops:['CSMT','Sandhurst Road','Dockyard Road','Reay Road',
+                           'Cotton Green','Sewri','Wadala Road','King\'s Circle',
+                           'Chunabhatti','Kurla','Tilak Nagar','Chembur',
+                           'Govandi','Mankhurd','Vashi','Belapur','Panvel'],
+                    depMins: [0, 20, 40],
+                    delayMin: 0, platform:'PF-1', coaches:9, icon:'🚇'
+                },
+                {
+                    no:'HR-203', name:'Slow (Andheri)', type:'Slow',
+                    from:'CSMT', to:'Andheri',
+                    stops:['CSMT','Wadala Road','Kurla','Chembur','Mankhurd',
+                           'Vashi','Nerul','Belapur','Khandeshwar','Panvel'],
+                    depMins: [10, 30, 50],
+                    delayMin: 0, platform:'PF-2', coaches:9, icon:'🚃'
+                },
+                {
+                    no:'HR-305', name:'AC Local (Harbour)', type:'AC Fast',
+                    from:'CSMT', to:'Belapur',
+                    stops:['CSMT','Wadala','Kurla','Chembur','Vashi','Belapur'],
+                    depMins: [15, 45],
+                    delayMin: 0, platform:'PF-3', coaches:12, icon:'❄️🚇'
+                },
+                {
+                    no:'HR-404', name:'Nerul Shuttle', type:'Slow',
+                    from:'Kurla', to:'Nerul',
+                    stops:['Kurla','Chembur','Govandi','Mankhurd','Vashi','Nerul'],
+                    depMins: [5, 25, 45],
+                    delayMin: 4, platform:'PF-4', coaches:9, icon:'🚃'
+                },
+                {
+                    no:'HR-502', name:'Uran Fast', type:'Fast',
+                    from:'CSMT', to:'Uran',
+                    stops:['CSMT','Kurla','Mankhurd','Vashi','Belapur','Khandeshwar','Uran'],
+                    depMins: [12, 52],
+                    delayMin: 0, platform:'PF-5', coaches:9, icon:'🚇'
+                }
+            ]
+        }
+    };
+
+    let activeLine = 'WR';
+
+    // ─── Helpers ───────────────────────────────────────────────────
+    // Returns next departure time string & minutes-until for a train
+    function nextDep(depMins, delayMin) {
+        const now  = new Date();
+        const nowM = now.getHours() * 60 + now.getMinutes();
+        const secs = now.getSeconds();
+
+        // build a list of departures in the next 2 hours (absolute minutes today)
+        const candidates = [];
+        for (let h = 0; h <= 23; h++) {
+            depMins.forEach(dm => {
+                candidates.push(h * 60 + dm + delayMin);
+            });
+        }
+        candidates.sort((a, b) => a - b);
+
+        const next = candidates.find(c => c > nowM) ?? (candidates[0] + 1440);
+        const diffM = next - nowM;
+        const depH  = Math.floor(next % 1440 / 60);
+        const depMi = next % 60;
+        const timeStr = `${String(depH).padStart(2,'0')}:${String(depMi).padStart(2,'0')}`;
+        return { timeStr, diffM, diffS: diffM * 60 - secs };
+    }
+
+    // ─── Render local board ────────────────────────────────────────
+    function renderLocalBoard() {
+        const now = new Date();
+        const h   = now.getHours();
+        const m   = now.getMinutes();
+        const rl  = getRushLevel(h, m);
+        const line = LOCAL_LINES[activeLine];
+
+        // Global rush badge
+        const badge = document.getElementById('rushStatusBadge');
+        badge.textContent  = rushLabel(rl);
+        badge.className    = 'peak-badge ' + (rl === 'high' ? 'peak-now' : 'off-peak');
+
+        // Line banner
+        document.getElementById('lineBanner').innerHTML = `
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                <span style="font-size:1.1rem;font-weight:700;color:${line.color};">
+                    ${line.name}
+                </span>
+                <span style="color:#64748b;font-size:0.85rem;">
+                    (${line.terminus.from} ↔ ${line.terminus.to})
+                </span>
+            </div>`;
+
+        // Cards
+        const grid = document.getElementById('localGrid');
+        grid.innerHTML = line.trains.map(train => {
+            const { timeStr, diffM, diffS } = nextDep(train.depMins, train.delayMin);
+            const pct   = rushPct(rl);
+            const cls   = rushClass(rl);
+            const label = rushLabel(rl);
+
+            const delayClass = train.delayMin === 0 ? 'delay-ok'
+                             : train.delayMin <= 5   ? 'delay-slight' : 'delay-late';
+            const delayTxt   = train.delayMin === 0 ? '✅ On Time'
+                             : `⚠ +${train.delayMin} min late`;
+
+            const typeColor = train.type === 'AC Fast' ? '#06b6d4'
+                            : train.type === 'Fast'    ? '#f59e0b' : '#94a3b8';
+
+            const stopsPreview = train.stops.slice(0,3).join(' → ') +
+                                 (train.stops.length > 3 ? ` → … → ${train.stops[train.stops.length-1]}` : '');
+
+            const cntMin  = String(Math.floor(diffM)).padStart(2,'0');
+            const cntSec  = String(Math.max(0, diffS % 60)).padStart(2,'0');
+
+            return `
+            <div class="local-card">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+                    <div class="train-no">${train.icon} ${train.no}</div>
+                    <span style="font-size:0.72rem;font-weight:700;padding:2px 8px;border-radius:6px;
+                                 background:${typeColor}22;color:${typeColor};border:1px solid ${typeColor}55;">
+                        ${train.type}
+                    </span>
+                </div>
+                <div class="train-name">${train.name}</div>
+                <div class="route-line">${train.from} → ${train.to}</div>
+                <div style="font-size:0.72rem;color:#64748b;margin-bottom:12px;
+                            white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                    ${stopsPreview}
+                </div>
+
+                <div class="info-row">
+                    <div>
+                        <div style="font-size:0.7rem;color:#64748b;margin-bottom:2px;">NEXT DEP</div>
+                        <div class="next-dep">${timeStr}</div>
+                    </div>
+                    <div class="countdown" id="cnt-${train.no.replace('-','')}">
+                        in ${cntMin}:${cntSec}
+                    </div>
+                </div>
+
+                <div class="crowd-label">🧑‍🤝‍🧑 Crowd Level — ${label}</div>
+                <div class="rush-bar-wrap" style="margin-bottom:10px;">
+                    <div class="rush-bar-bg">
+                        <div class="rush-bar-fill ${cls}" style="width:${pct}%;"></div>
+                    </div>
+                    <span style="font-size:0.78rem;color:#94a3b8;min-width:30px;text-align:right;">${pct}%</span>
+                </div>
+
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
+                    <span class="delay-pill ${delayClass}">${delayTxt}</span>
+                    <span style="font-size:0.75rem;color:#64748b;">
+                        🚉 ${train.platform} &nbsp;|&nbsp; ${train.coaches} coaches
+                    </span>
+                </div>
+            </div>`;
+        }).join('');
+
+        // Nearest departure for global countdown
+        const allNextSec = line.trains.map(tr => nextDep(tr.depMins, tr.delayMin).diffS);
+        const minSec     = Math.min(...allNextSec);
+        const gmM = String(Math.floor(minSec / 60)).padStart(2,'0');
+        const gmS = String(Math.max(0, minSec % 60)).padStart(2,'0');
+        document.getElementById('globalCountdown').textContent = `${gmM}:${gmS}`;
+    }
+
+    function switchLine(code) {
+        activeLine = code;
+        // Update tab active states
+        document.querySelectorAll('.line-tab').forEach(el => el.classList.remove('active'));
+        const map = { WR:0, CR:1, HR:2 };
+        document.querySelectorAll('.line-tab')[map[code]].classList.add('active');
+        renderLocalBoard();
+    }
+
+    // ─── Countdown ticker (every second) ──────────────────────────
+    function tickCountdowns() {
+        renderLocalBoard(); // re-render fully — keeps countdowns accurate
+    }
+
+    // Boot local board
+    renderLocalBoard();
+    setInterval(tickCountdowns, 1000);
     </script>
 </body>
 </html>
