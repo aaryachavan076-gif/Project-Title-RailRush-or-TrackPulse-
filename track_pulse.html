@@ -5,97 +5,503 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TrackPulse - Real-Time Train Movement Telemetry</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ── Live Train Map ── */
+        .live-train-section {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 24px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .live-train-section::before {
+            content: "";
+            position: absolute; inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+        .section-header {
+            display: flex; justify-content: space-between;
+            align-items: center; flex-wrap: wrap;
+            gap: 12px; margin-bottom: 24px;
+        }
+        .live-dot {
+            display: inline-flex; align-items: center; gap: 7px;
+            background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.4);
+            border-radius: 999px; padding: 5px 14px;
+            font-size: 0.82rem; font-weight: 600; color: #4ade80; letter-spacing: 0.5px;
+        }
+        .live-dot::before {
+            content: ""; width: 8px; height: 8px;
+            background: #4ade80; border-radius: 50%;
+            animation: blink 1.2s ease-in-out infinite;
+        }
+        @keyframes blink {
+            0%,100%{ opacity:1; transform:scale(1); }
+            50%    { opacity:0.3; transform:scale(0.7); }
+        }
+
+        /* ── Train selector tabs ── */
+        .train-tabs { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:22px; }
+        .train-tab {
+            padding: 8px 16px; border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.07); color: #94a3b8;
+            cursor: pointer; font-size: 0.85rem; font-weight: 600;
+            transition: all 0.2s;
+        }
+        .train-tab:hover  { background:rgba(255,255,255,0.12); color:#e2e8f0; }
+        .train-tab.active { background:#0284c7; border-color:#0284c7; color:#fff; }
+
+        /* ── Route Track ── */
+        .route-track-wrap {
+            background: rgba(0,0,0,0.25); border-radius: 14px;
+            padding: 30px 24px 20px; position: relative;
+        }
+        .route-meta {
+            display: flex; justify-content: space-between;
+            align-items: flex-start; flex-wrap: wrap;
+            gap: 12px; margin-bottom: 30px;
+        }
+        .route-meta h3 { font-size:1.25rem; color:#f1f5f9; margin:0; }
+        .route-meta p  { color:#94a3b8; font-size:0.88rem; margin:4px 0 0; }
+
+        /* ── Animated Track ── */
+        .track-container { position:relative; padding:0 10px; margin-bottom:12px; }
+        .track-line {
+            position:relative; height:6px;
+            background:rgba(255,255,255,0.1); border-radius:3px;
+            margin: 52px 0 80px;
+        }
+        .track-progress {
+            position:absolute; left:0; top:0; height:100%;
+            background:linear-gradient(90deg,#22c55e,#38bdf8);
+            border-radius:3px; transition:width 0.8s cubic-bezier(.4,0,.2,1);
+            box-shadow:0 0 12px rgba(56,189,248,0.5);
+        }
+        .train-icon {
+            position:absolute; top:50%;
+            transform:translate(-50%,-50%);
+            font-size:2rem; transition:left 0.8s cubic-bezier(.4,0,.2,1);
+            filter:drop-shadow(0 0 8px #38bdf8); z-index:10;
+            animation:trainBounce 0.5s ease-in-out infinite alternate;
+        }
+        @keyframes trainBounce {
+            from { transform:translate(-50%,-60%); }
+            to   { transform:translate(-50%,-40%); }
+        }
+        .stations-row {
+            display:flex; justify-content:space-between;
+            position:absolute; left:10px; right:10px; top:0;
+        }
+        .station-pin {
+            display:flex; flex-direction:column;
+            align-items:center; position:absolute;
+        }
+        .station-dot {
+            width:14px; height:14px; border-radius:50%;
+            border:3px solid #334155; background:#334155;
+            position:relative; top:42px;
+            transition:all 0.4s; z-index:5;
+        }
+        .station-dot.passed  { background:#22c55e; border-color:#22c55e; box-shadow:0 0 8px #22c55e; }
+        .station-dot.current { background:#38bdf8; border-color:#38bdf8; box-shadow:0 0 12px #38bdf8; animation:currentPulse 1.5s ease infinite; }
+        .station-dot.ahead   { background:#1e293b; border-color:#475569; }
+        @keyframes currentPulse {
+            0%,100%{ box-shadow:0 0 8px #38bdf8; }
+            50%    { box-shadow:0 0 20px #38bdf8,0 0 30px rgba(56,189,248,0.4); }
+        }
+        .station-label {
+            font-size:0.7rem; color:#94a3b8; text-align:center;
+            max-width:70px; line-height:1.3;
+            position:absolute; top:70px; left:50%;
+            transform:translateX(-50%); white-space:nowrap;
+        }
+        .station-label.passed  { color:#4ade80; font-weight:600; }
+        .station-label.current { color:#38bdf8; font-weight:700; }
+        .station-time {
+            position:absolute; top:10px; left:50%;
+            transform:translateX(-50%);
+            font-size:0.68rem; color:#64748b; white-space:nowrap;
+        }
+        .station-time.current { color:#7dd3fc; font-weight:600; }
+
+        /* ── Stats strip ── */
+        .stats-strip {
+            display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
+            gap:12px; margin-top:20px;
+        }
+        .stat-chip {
+            background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.09);
+            border-radius:10px; padding:12px 14px; text-align:center;
+        }
+        .stat-chip .val { font-size:1.35rem; font-weight:700; color:#f1f5f9; }
+        .stat-chip .lbl { font-size:0.7rem; color:#64748b; margin-top:2px; text-transform:uppercase; letter-spacing:0.5px; }
+        .stat-chip.green .val { color:#4ade80; }
+        .stat-chip.red   .val { color:#f87171; }
+        .stat-chip.blue  .val { color:#38bdf8; }
+        .stat-chip.yellow .val { color:#fbbf24; }
+
+        /* ── Telemetry Table ── */
+        .tele-table { width:100%; border-collapse:collapse; text-align:left; }
+        .tele-table th { padding:12px 14px; color:#64748b; font-size:0.8rem; text-transform:uppercase; letter-spacing:0.5px; border-bottom:2px solid #e2e8f0; }
+        .tele-table td { padding:13px 14px; border-bottom:1px solid #f1f5f9; vertical-align:middle; }
+        .tele-table tr:last-child td { border-bottom:none; }
+        .tele-table tr:hover td { background:#f8fafc; }
+        .tele-table tr.tracking-row td { background:#eff6ff; }
+        .badge-live { display:inline-block; padding:3px 10px; border-radius:999px; font-size:0.78rem; font-weight:600; }
+        .badge-on-time { background:#dcfce7; color:#15803d; }
+        .badge-delay   { background:#fee2e2; color:#b91c1c; }
+
+        #liveClock { font-size:1.1rem; font-weight:700; color:#38bdf8; font-variant-numeric:tabular-nums; }
+
+        @media(max-width:640px){
+            .station-label { font-size:0.6rem; max-width:52px; }
+            .train-icon    { font-size:1.4rem; }
+        }
+    </style>
 </head>
 <body>
     <header>
         <div class="nav-container">
-            <a href="index.html" class="logo">🚆 Track<span>Pulse</span> <span style="font-size: 0.8rem; font-weight: 400; opacity: 0.8;">by RailRush</span></a>
+            <a href="index.html" class="logo">🚆 Track<span>Pulse</span> <span style="font-size:0.8rem;font-weight:400;opacity:0.8;">by RailRush</span></a>
             <nav>
                 <a href="index.html">Home</a>
                 <a href="experiments.html">Lab Suite (Exp 01-13)</a>
                 <a href="spa.html">React SPA</a>
-                <a href="track_pulse.html" style="color: var(--secondary-color); font-weight: bold;">TrackPulse</a>
+                <a href="track_pulse.html" style="color:var(--accent);font-weight:bold;">TrackPulse</a>
                 <a href="index.html#pnrSection">PNR Status</a>
             </nav>
         </div>
     </header>
 
     <div class="container">
-        <div class="card" style="display: flex; justify-content: space-between; align-items: center; background: #0f172a; color: white; flex-wrap: wrap; gap: 15px;">
-            <div>
-                <h2 style="margin: 0 0 6px; color: #38bdf8;">Live Train Movement Telemetry</h2>
-                <p style="opacity: 0.8; font-size: 0.95rem; margin: 0;">Auto-refreshing with live telemetry feeds</p>
-            </div>
-            <div style="display: flex; gap: 10px; align-items: center;">
-                <span class="badge badge-success" id="pulseStatus">FEED: ACTIVE</span>
-                <button class="btn btn-sm btn-secondary" onclick="refreshTelemetry()">Refresh Now 🔄</button>
-            </div>
-        </div>
 
-        <div class="card" style="margin-top: 1.5rem;">
-            <h3>Active En-Route Trains</h3>
-            <div style="overflow-x: auto; margin-top: 1rem;">
-                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+        <!-- ══════════  LIVE TRAIN MAP  ══════════ -->
+        <div class="live-train-section">
+            <div class="section-header">
+                <div>
+                    <h2 style="margin:0 0 4px;font-size:1.55rem;">🛤️ Live Train on Route</h2>
+                    <p style="color:#94a3b8;margin:0;font-size:0.9rem;">
+                        Real-time position, speed &amp; delay telemetry &mdash; auto-updates every 5 seconds
+                    </p>
+                </div>
+                <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+                    <span class="live-dot">LIVE FEED</span>
+                    <span id="liveClock">--:--:--</span>
+                </div>
+            </div>
+
+            <!-- Train selector tabs -->
+            <div class="train-tabs" id="trainTabs"></div>
+
+            <!-- Route Track Visualiser -->
+            <div class="route-track-wrap">
+                <div class="route-meta">
+                    <div>
+                        <h3 id="trainTitle">–</h3>
+                        <p id="trainSubtitle">–</p>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-size:0.8rem;color:#64748b;">Locomotive / Coach</div>
+                        <div id="trainCoach" style="color:#f1f5f9;font-weight:700;font-size:0.92rem;">–</div>
+                    </div>
+                </div>
+
+                <!-- Animated Track -->
+                <div class="track-container" id="trackContainer">
+                    <div class="track-line">
+                        <div class="track-progress" id="trackProgress"></div>
+                        <div class="train-icon" id="trainIcon">🚆</div>
+                    </div>
+                    <div class="stations-row" id="stationsRow"></div>
+                </div>
+
+                <!-- Stats Strip -->
+                <div class="stats-strip">
+                    <div class="stat-chip blue">
+                        <div class="val" id="statSpeed">–</div>
+                        <div class="lbl">Speed (km/h)</div>
+                    </div>
+                    <div class="stat-chip" id="statDelayChip">
+                        <div class="val" id="statDelay">–</div>
+                        <div class="lbl">Delay (min)</div>
+                    </div>
+                    <div class="stat-chip">
+                        <div class="val" id="statProgress">–</div>
+                        <div class="lbl">Journey %</div>
+                    </div>
+                    <div class="stat-chip yellow">
+                        <div class="val" id="statETA">–</div>
+                        <div class="lbl">ETA Next Stn</div>
+                    </div>
+                    <div class="stat-chip green">
+                        <div class="val" id="statKm">–</div>
+                        <div class="lbl">Km Covered</div>
+                    </div>
+                    <div class="stat-chip">
+                        <div class="val" id="statPassengers">–</div>
+                        <div class="lbl">Passengers</div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /live-train-section -->
+
+
+        <!-- ══════════  ALL ACTIVE TRAINS TABLE  ══════════ -->
+        <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:1.2rem;">
+                <div>
+                    <h3 style="margin:0;">📡 All Active En-Route Trains</h3>
+                    <p style="color:var(--text-muted);font-size:0.88rem;margin:4px 0 0;">Click any row to track it live above</p>
+                </div>
+                <button class="btn btn-sm btn-secondary" onclick="renderTable()">Refresh 🔄</button>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="tele-table">
                     <thead>
-                        <tr style="border-bottom: 2px solid #e2e8f0; color: #64748b;">
-                            <th style="padding: 12px;">Train #</th>
-                            <th style="padding: 12px;">Train Name</th>
-                            <th style="padding: 12px;">Current Station</th>
-                            <th style="padding: 12px;">Platform</th>
-                            <th style="padding: 12px;">Next Station</th>
-                            <th style="padding: 12px;">Status / Delay</th>
+                        <tr>
+                            <th>Train #</th>
+                            <th>Train Name</th>
+                            <th>Current Station</th>
+                            <th>Platform</th>
+                            <th>Next Station</th>
+                            <th>Speed</th>
+                            <th>Status / Delay</th>
+                            <th>Track</th>
                         </tr>
                     </thead>
                     <tbody id="telemetryBody"></tbody>
                 </table>
             </div>
         </div>
-    </div>
+
+    </div><!-- /container -->
 
     <footer>
         <p>&copy; 2026 RailRush (TrackPulse). Real-time GPS movement telemetry stream.</p>
     </footer>
 
     <script>
-        const trainsTelemetry = [
-            { number: "12051", name: "Jan Shatabdi Express", current: "Ratnagiri Junction", platform: "PF-2", next: "Madgaon (Goa)", status: "ON TIME", delay: 0 },
-            { number: "22221", name: "Rajdhani Express", current: "Bhopal Junction", platform: "PF-1", next: "Jhansi Junction", status: "10 MIN DELAY", delay: 10 },
-            { number: "12123", name: "Deccan Queen", current: "Lonavala Station", platform: "PF-3", next: "Shivajinagar", status: "ON TIME", delay: 0 },
-            { number: "11019", name: "Konark Express", current: "Solapur Junction", platform: "PF-4", next: "Gulbarga", status: "25 MIN DELAY", delay: 25 }
-        ];
+    // ═══════════════════════════════════════════════════════
+    //  TRAINS DATA  — 5 trains with full route schedule
+    // ═══════════════════════════════════════════════════════
+    const TRAINS = [
+        {
+            number:"12051", name:"Jan Shatabdi Express",
+            coach:"WAP-5 #30050 | 12 coaches | CC + 2S",
+            passengers:782, totalKm:582, platform:"PF-1",
+            route:[
+                {name:"CSMT Mumbai",    time:"05:10", km:0  },
+                {name:"Dadar",          time:"05:22", km:9  },
+                {name:"Panvel",         time:"06:05", km:55 },
+                {name:"Roha",           time:"07:00", km:112},
+                {name:"Chiplun",        time:"08:30", km:227},
+                {name:"Ratnagiri Jn.", time:"09:45", km:320},
+                {name:"Kankavali",      time:"11:10", km:420},
+                {name:"Kudal",          time:"11:55", km:480},
+                {name:"Madgaon (Goa)", time:"13:30", km:582}
+            ],
+            currentStationIdx:4, delayMin:0,  speedKmh:98,  segFrac:0.3
+        },
+        {
+            number:"22221", name:"Rajdhani Express",
+            coach:"WAP-7 #30450 | 20 coaches | 1A + 2A + 3A",
+            passengers:1340, totalKm:1386, platform:"PF-3",
+            route:[
+                {name:"CSMT Mumbai",    time:"16:00", km:0   },
+                {name:"Kalyan Jn.",     time:"16:58", km:54  },
+                {name:"Igatpuri",       time:"18:15", km:158 },
+                {name:"Nasik Road",     time:"19:05", km:187 },
+                {name:"Manmad Jn.",     time:"20:10", km:261 },
+                {name:"Bhusaval Jn.",   time:"21:40", km:376 },
+                {name:"Bhopal Jn.",     time:"02:30", km:771 },
+                {name:"Jhansi Jn.",     time:"05:10", km:975 },
+                {name:"Agra Cantt.",    time:"06:50", km:1109},
+                {name:"H. Nizamuddin", time:"09:55", km:1386}
+            ],
+            currentStationIdx:6, delayMin:12, speedKmh:112, segFrac:0.6
+        },
+        {
+            number:"12123", name:"Deccan Queen",
+            coach:"WAP-4 #22000 | 15 coaches | CC + SL",
+            passengers:910, totalKm:192, platform:"PF-3",
+            route:[
+                {name:"CSMT Mumbai",  time:"17:10", km:0  },
+                {name:"Dadar",        time:"17:22", km:9  },
+                {name:"Thane",        time:"17:45", km:34 },
+                {name:"Kalyan Jn.",   time:"18:10", km:54 },
+                {name:"Karjat",       time:"18:50", km:91 },
+                {name:"Lonavala",     time:"19:25", km:121},
+                {name:"Shivajinagar",time:"20:15", km:178},
+                {name:"Pune Jn.",    time:"20:25", km:192}
+            ],
+            currentStationIdx:5, delayMin:0,  speedKmh:86,  segFrac:0.45
+        },
+        {
+            number:"11019", name:"Konark Express",
+            coach:"WAM-4 #21400 | 22 coaches | SL + GN",
+            passengers:1628, totalKm:1614, platform:"PF-4",
+            route:[
+                {name:"CSMT Mumbai",    time:"08:05", km:0   },
+                {name:"Dadar",          time:"08:17", km:9   },
+                {name:"Solapur Jn.",   time:"14:20", km:466 },
+                {name:"Gulbarga",       time:"16:35", km:594 },
+                {name:"Wadi Jn.",       time:"17:40", km:653 },
+                {name:"Guntakal Jn.",  time:"21:00", km:832 },
+                {name:"Vijayawada Jn.",time:"03:00", km:1146},
+                {name:"Bhubaneswar",   time:"13:00", km:1540},
+                {name:"Puri",           time:"15:00", km:1614}
+            ],
+            currentStationIdx:3, delayMin:25, speedKmh:74,  segFrac:0.15
+        },
+        {
+            number:"12028", name:"Shatabdi Express",
+            coach:"WAP-5 #30065 | 13 coaches | EC + CC",
+            passengers:640, totalKm:337, platform:"PF-2",
+            route:[
+                {name:"CSMT Mumbai", time:"06:25", km:0  },
+                {name:"Dadar",       time:"06:37", km:9  },
+                {name:"Kalyan Jn.", time:"07:10", km:54 },
+                {name:"Igatpuri",   time:"08:20", km:158},
+                {name:"Nasik Road", time:"09:00", km:187},
+                {name:"Manmad Jn.", time:"09:55", km:261},
+                {name:"Aurangabad", time:"11:25", km:337}
+            ],
+            currentStationIdx:2, delayMin:5,  speedKmh:105, segFrac:0.7
+        }
+    ];
 
-        function renderTelemetry() {
-            const tbody = document.getElementById('telemetryBody');
-            let html = "";
-            trainsTelemetry.forEach(t => {
-                const isLate = t.delay > 0;
-                html += `
-                    <tr style="border-bottom: 1px solid #e2e8f0;">
-                        <td style="padding: 14px; font-weight: bold; color: var(--primary-color);">${t.number}</td>
-                        <td style="padding: 14px; font-weight: 600;">${t.name}</td>
-                        <td style="padding: 14px;"><strong>${t.current}</strong></td>
-                        <td style="padding: 14px;"><span class="badge" style="background:#e0f2fe; color:#0369a1;">${t.platform}</span></td>
-                        <td style="padding: 14px; color: #475569;">${t.next}</td>
-                        <td style="padding: 14px;">
-                            <span class="badge ${isLate ? 'badge-danger' : 'badge-success'}">
-                                ${t.status}
-                            </span>
-                        </td>
-                    </tr>
-                `;
-            });
-            tbody.innerHTML = html;
+    let activeTrain = 0;
+
+    // ── Clock ──────────────────────────────────────────────
+    function tick() {
+        document.getElementById('liveClock').textContent =
+            new Date().toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+    }
+    setInterval(tick, 1000);
+    tick();
+
+    // ── Tabs ───────────────────────────────────────────────
+    function buildTabs() {
+        document.getElementById('trainTabs').innerHTML =
+            TRAINS.map((t, i) => `
+                <div class="train-tab ${i===activeTrain?'active':''}"
+                     onclick="selectTrain(${i})">
+                    ${t.number} &mdash; ${t.name.split(' ').slice(0,2).join(' ')}
+                </div>`).join('');
+    }
+
+    function selectTrain(i) {
+        activeTrain = i;
+        buildTabs();
+        renderLiveMap();
+        renderTable();
+    }
+
+    // ── Live Map ───────────────────────────────────────────
+    function renderLiveMap() {
+        const t     = TRAINS[activeTrain];
+        const route = t.route;
+        const ci    = t.currentStationIdx;
+        const frac  = t.segFrac;
+
+        const curKm  = route[ci].km;
+        const nextKm = ci + 1 < route.length ? route[ci + 1].km : curKm;
+        const kmNow  = curKm + (nextKm - curKm) * frac;
+        const pct    = Math.min(99, Math.round((kmNow / t.totalKm) * 100));
+
+        // Header
+        document.getElementById('trainTitle').textContent =
+            `🚆 ${t.name}  (${t.number})`;
+        document.getElementById('trainSubtitle').textContent =
+            `${route[0].name}  →  ${route[route.length-1].name}   |   Dep: ${route[0].time}   |   Arr: ${route[route.length-1].time}`;
+        document.getElementById('trainCoach').textContent = t.coach;
+
+        // Bar + icon
+        document.getElementById('trackProgress').style.width = pct + '%';
+        document.getElementById('trainIcon').style.left       = pct + '%';
+
+        // Stats
+        document.getElementById('statSpeed').textContent    = t.speedKmh;
+        document.getElementById('statDelay').textContent    = t.delayMin === 0 ? '✓ 0' : '+' + t.delayMin;
+        document.getElementById('statProgress').textContent = pct + '%';
+        document.getElementById('statKm').textContent       = Math.round(kmNow) + ' km';
+        document.getElementById('statPassengers').textContent = t.passengers.toLocaleString();
+
+        const chip = document.getElementById('statDelayChip');
+        chip.className = 'stat-chip ' + (t.delayMin > 10 ? 'red' : t.delayMin > 0 ? 'yellow' : 'green');
+
+        if (ci + 1 < route.length) {
+            const [h, m] = route[ci + 1].time.split(':').map(Number);
+            const eta = new Date();
+            eta.setHours(h, m + t.delayMin, 0);
+            document.getElementById('statETA').textContent =
+                eta.toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'});
+        } else {
+            document.getElementById('statETA').textContent = 'Terminal';
         }
 
-        function refreshTelemetry() {
-            renderTelemetry();
-            const pulse = document.getElementById('pulseStatus');
-            pulse.textContent = "SYNCED JUST NOW";
-            setTimeout(() => { pulse.textContent = "FEED: ACTIVE"; }, 1500);
-        }
+        // Stations
+        document.getElementById('stationsRow').innerHTML = route.map((s, i) => {
+            const state = i < ci ? 'passed' : i === ci ? 'current' : 'ahead';
+            const pos   = (s.km / t.totalKm) * 100;
+            return `
+                <div class="station-pin" style="left:${pos}%;transform:translateX(-50%);">
+                    <div style="position:relative;height:95px;">
+                        <div class="station-time ${state==='current'?'current':''}">${s.time}</div>
+                        <div class="station-dot ${state}"></div>
+                        <div class="station-label ${state}">${s.name}</div>
+                    </div>
+                </div>`;
+        }).join('');
+    }
 
-        renderTelemetry();
-        setInterval(refreshTelemetry, 15000);
+    // ── Table ──────────────────────────────────────────────
+    function renderTable() {
+        document.getElementById('telemetryBody').innerHTML = TRAINS.map((t, i) => {
+            const cur  = t.route[t.currentStationIdx];
+            const next = t.route[t.currentStationIdx + 1] || {name:'Terminal'};
+            const badge = t.delayMin === 0
+                ? '<span class="badge-live badge-on-time">✅ ON TIME</span>'
+                : `<span class="badge-live badge-delay">⚠ +${t.delayMin} MIN</span>`;
+            return `
+                <tr class="${i===activeTrain?'tracking-row':''}" style="cursor:pointer;" onclick="selectTrain(${i})">
+                    <td><strong style="color:var(--primary);">${t.number}</strong></td>
+                    <td><strong>${t.name}</strong></td>
+                    <td><strong>${cur.name}</strong></td>
+                    <td><span class="badge-live" style="background:#e0f2fe;color:#0369a1;">${t.platform}</span></td>
+                    <td style="color:#475569;">${next.name}</td>
+                    <td><strong>${t.speedKmh} km/h</strong></td>
+                    <td>${badge}</td>
+                    <td>
+                        <button class="btn btn-sm ${i===activeTrain?'btn-secondary':''}"
+                            style="padding:4px 10px;font-size:0.78rem;"
+                            onclick="event.stopPropagation();selectTrain(${i})">
+                            ${i===activeTrain?'📡 Tracking':'▶ Track'}
+                        </button>
+                    </td>
+                </tr>`;
+        }).join('');
+    }
+
+    // ── Motion simulation (every 5 s) ─────────────────────
+    function simulateMotion() {
+        TRAINS.forEach(t => {
+            t.segFrac = Math.min(t.segFrac + 0.005, 0.97);
+            // small random speed jitter
+            if (Math.random() < 0.35)
+                t.speedKmh = Math.max(45, Math.min(140, t.speedKmh + (Math.random() > 0.5 ? 4 : -4)));
+        });
+    }
+
+    // ── Boot ───────────────────────────────────────────────
+    buildTabs();
+    renderLiveMap();
+    renderTable();
+    setInterval(() => { simulateMotion(); renderLiveMap(); renderTable(); }, 5000);
     </script>
 </body>
 </html>
